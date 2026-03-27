@@ -1,4 +1,4 @@
-class Store{
+class Store implements searchable {
     private String name;
     private Item[] items;
     private Customer[] Customers;
@@ -20,7 +20,7 @@ class Store{
     }
     public boolean removeItem(int itemId){
         for(int i = 0; i < nofItem; i++){
-            if(items[i].getId == itemId)
+            if(items[i].getId() == itemId)
             {
                 for(int j = i; j < nofItem - 1; j++)
                     items[j] = items[j + 1];
@@ -33,7 +33,7 @@ class Store{
 
     public boolean updateStoke(int itemId, int newStock){
         for (int i = 0; i < nofItem; i++)
-            if(items[i].getId == itemId){
+            if(items[i].getId() == itemId){
                 items[i].setStock(newStock);
                 return true;
             }
@@ -47,18 +47,7 @@ class Store{
 
         return null;
     }
-    public boolean addCustomer(Customer customer){
-        if(nofC >= Customers.length || customer == null)
-            return false;
-        Customer[nofC++] = customer;
-        return true;
-    }
-    public Customer searchCustomer(int custID){
-        for(int i = 0 ; i < nofC; i++)
-            if(customers[i].getId() == custID)
-                return customers[i];
-        return null;
-    }
+  
     public void displayAllItems(){
         for(int i = 0; i < nofItem; i++)
             System.out.println("Product : " + items[i].getName() + " price : " + items[i].getPrice());
@@ -66,9 +55,20 @@ class Store{
     public int countAvalibleItems(int index){ // ??
         int count = 0;
         for (int i = 0; i < nofItem; i++){
-            if(items[i].getStock > 0)
+            if(items[i].getStock() > 0)
                 count++;
         }
         return count;
+    }
+    public Item searchByName(String name) {
+        for (int i = 0; i < nofItem; i++) {
+            if (items[i] != null && items[i].getName().equalsIgnoreCase(name)) {
+                return items[i];
+            }
+        }
+        return null;
+    }
+    public String getName() {
+        return name;
     }
 }

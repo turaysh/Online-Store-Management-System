@@ -33,7 +33,7 @@ public abstract class Item {
     public void setName(String name) {
         this.name = name;
     }
-    public void setItemId(int itemId) {
+    public void setId(int itemId) {
         this.itemId = itemId;
     }
 public String getDetails(){
