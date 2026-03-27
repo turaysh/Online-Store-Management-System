@@ -9,7 +9,7 @@ public abstract class Item {
         this.price = price;
         this.stock = stock;
     }
-    public int getItemId() {
+    public int getId() {
         return itemId;
     }
     public String getName() {
