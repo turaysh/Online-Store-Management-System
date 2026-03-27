@@ -2,6 +2,7 @@ class ShoppingCart implements searchable  {
     private Item[] items;
     private int nofItem;
     private int count;
+    
 
     public ShoppingCart(){
         items = new Item[100];
@@ -35,17 +36,17 @@ class ShoppingCart implements searchable  {
 
         return total;
     }
-   public int countItemRecursive(int index) {
-    if (index >= count) {
-        return 0; 
-    }
+    public int countItemRecursive(int index) {
+        if (index >= count) {
+            return 0; 
+        }
 
-    if (items[index] != null) {
-        return 1 + countItemRecursive(index + 1);
-    } else {
-        return countItemRecursive(index + 1);
+        if (items[index] != null) {
+            return 1 + countItemRecursive(index + 1);
+        } else {
+            return countItemRecursive(index + 1);
+        }
     }
-}
     public void clearCart(){
         for(int i =0; i < nofItem; i++){
             items[i] = null;
@@ -53,22 +54,22 @@ class ShoppingCart implements searchable  {
         nofItem = 0;
         System.out.println("the operation has been succesfuly done");
     }
-public void displayCartItems(){
-    for(int i = 0; i < nofItem; i++){
-        if(items[i] != null){
-            System.out.println(items[i].getName());
+    public void displayCartItems(){
+        for(int i = 0; i < nofItem; i++){
+            if(items[i] != null){
+                System.out.println(items[i].getName());
+            }
         }
     }
-}
-public Item[] getItems() {
-    return items;
+    public Item[] getItems() { 
+        return items;
 
-}
-public Item searchByName(String name) {
-    for (int i = 0; i < nofItem; i++) {
-        if (items[i] != null && items[i].getName().equalsIgnoreCase(name)) {
-            return items[i];
-        }
     }
-    return null;
-}}
+    public Item searchByName(String name) {
+        for (int i = 0; i < nofItem; i++) {
+            if (items[i] != null && items[i].getName().equalsIgnoreCase(name)) {
+                return items[i];
+            }
+        }
+        return null;
+    }}

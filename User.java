@@ -8,7 +8,7 @@ public abstract class User {
         this.name = name;
         this.email = email;
     }
-    public String getRole(){
+    public String getRole(){ // should be abstract!! without body
         return "User";
     }
     public Account setAccount(Account account) {

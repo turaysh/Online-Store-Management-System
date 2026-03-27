@@ -47,7 +47,18 @@ class Store implements searchable {
 
         return null;
     }
-  
+    public boolean addCustomer(Customer customer){
+        if(nofC >= Customers.length || customer == null)
+            return false;
+        Customer[nofC++] = customer;
+        return true;
+    }
+    public Customer searchCustomer(int custID){
+        for(int i = 0 ; i < nofC; i++)
+            if(customers[i].getId() == custID)
+                return customers[i];
+        return null;
+    }
     public void displayAllItems(){
         for(int i = 0; i < nofItem; i++)
             System.out.println("Product : " + items[i].getName() + " price : " + items[i].getPrice());

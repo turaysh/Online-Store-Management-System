@@ -10,7 +10,7 @@ class Customer extends User{
         super(id,name,email);
         this.location = location;
         orders = new Order[100];
-        
+        shopC = new ShoppingCart();
         CountOrder = 0;
     }
     public Account creatAcount(String userName, String password)
@@ -36,9 +36,9 @@ class Customer extends User{
         return null;
     }
     public Order Checkout(){
-Scanner sc = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         shopC.displayCartItems();
-        shopC.calculateTotal();
+        // shopC.calculateTotal(); // ??
         System.out.println("If you want to checkout press 1, if you want to clear the cart press 2");
         int choice = sc.nextInt();
         if(choice == 1){
