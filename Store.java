@@ -32,6 +32,9 @@ class Store implements searchable {
     }
     return false;
 }
+public int getNextUserId() {
+    return userCount + 1;
+}
     public boolean addItem(Item item){
         if(nofItem >= items.length || item == null)
             return false;
@@ -148,7 +151,6 @@ public void loadUsersFromFile() {
                 Account account = new Account(username, password);
                 Customer c = new Customer(id, username, password, location, account);
                 userCount++;
-                c.setAccount(account);
                 addUser(c);
 
             }

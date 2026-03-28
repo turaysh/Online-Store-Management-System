@@ -5,8 +5,6 @@ public class test {
         Store store = new Store("My Store");
         store.loadUsersFromFile();
         ShoppingCart cart = new ShoppingCart();
-        Account accounts[] = new Account[1000];
-        User customers[] = new Customer[1000];
         User admin1 = new Admin(12345678,"Ahmed","ahmed@example.com",5000);
         User admin2 = new Admin(22345678,"Abdulmalik","abdulmalik@example.com",4000);
         User admin3 = new Admin(32345678,"Bader","bader@example.com",2000);
@@ -40,27 +38,19 @@ System.out.println("Welcome to " + store.getName());
             System.out.println("Enter your location: " );
             String location = sc.next();
             Account account = new Account(username, password);
-            for (int i = 0; i < accounts.length; i++) {
-                if (accounts[i] == null) {
-                    accounts[i] = account;
-                    User newCustomer = new Customer(i,username, email, location, account);
-                    customers[i] = newCustomer;
-                    newCustomer.setAccount(account);
-                    store.addUser(newCustomer);
-                    
-                    store.saveUsersToFile();
-                    break;
-                    
-                }
-            }
+            User newCustomer = new Customer(store.getNextUserId(), username, email, location, account);
+            newCustomer.setAccount(account);
+            store.addUser(newCustomer);
+            store.saveUsersToFile();
             System.out.println("Account created successfully!");
-            break;
+                    
+                break;
         case 2:
             System.out.print("Enter username: ");
             String loginUsername = sc.next();
             System.out.print("Enter password: ");
             String loginPassword = sc.next();
-            for (Account acc : accounts) {
+            
                
                     User user = store.login(loginUsername, loginPassword);
                     if (user != null) {
@@ -252,7 +242,7 @@ break;
                             break;
                         }
    
-            }
+            
             break;
         case 0:
             System.out.println("Goodbye!");
