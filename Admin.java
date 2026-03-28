@@ -1,6 +1,7 @@
 public class Admin extends Employee {
     public Admin(int id, String name, String email, double salary) {
         super(id, name, email, salary);
+        
     }
     @Override
     public String getRole() {
@@ -15,4 +16,5 @@ public class Admin extends Employee {
     public boolean updateStock(Store store, int itemId, int newStock) {
         return store.updateStoke(itemId, newStock);
     }
+
 }

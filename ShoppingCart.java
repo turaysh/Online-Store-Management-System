@@ -46,6 +46,7 @@ class ShoppingCart implements searchable  {
         return countItemRecursive(index + 1);
     }
 }
+
     public void clearCart(){
         for(int i =0; i < nofItem; i++){
             items[i] = null;

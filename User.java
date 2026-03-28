@@ -1,7 +1,7 @@
 public abstract class User {
     private int id;
     private String name;
-    private String email;
+    protected String email;
     private Account account;
     public User(int id, String name, String email){
         this.id = id;
@@ -17,5 +17,14 @@ public abstract class User {
     }
     public Account getAccount() {
         return account;
+    }
+    public String getUsername() {
+        return account != null ? account.getUsername() : null;
+    }
+    public String getPassword() {
+        return account != null ? account.getPassword() : null;
+    }
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

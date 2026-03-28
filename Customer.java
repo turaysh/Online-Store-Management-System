@@ -42,7 +42,7 @@ Scanner sc = new Scanner(System.in);
         System.out.println("If you want to checkout press 1, if you want to clear the cart press 2");
         int choice = sc.nextInt();
         if(choice == 1){
-            Order order = new Order(CountOrder + 1, shopC.getItems(), "Processing");
+            Order order = new Order(CountOrder + 1, "Processing");
             addOrder(order);
             shopC.clearCart();
             return order;
@@ -53,5 +53,11 @@ Scanner sc = new Scanner(System.in);
     }
    public String getRole() {
         return "Customer";
+    }
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    public void setEmail(String email) {
+        super.setEmail(email);
     }
 }
