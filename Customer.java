@@ -57,7 +57,13 @@ Scanner sc = new Scanner(System.in);
     public void setLocation(String location) {
         this.location = location;
     }
+    public String getlocation() {
+        return location;
+    }
     public void setEmail(String email) {
         super.setEmail(email);
+    }
+    public String getName() {
+        return super.getUsername();
     }
 }

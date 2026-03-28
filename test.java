@@ -1,8 +1,9 @@
 import java.util.Scanner;
 public class test {
-    public static void main(String[] args) {
+    public static void main(String[] args) { 
         Scanner sc = new Scanner(System.in);
         Store store = new Store("My Store");
+        store.loadUsersFromFile();
         ShoppingCart cart = new ShoppingCart();
         Account accounts[] = new Account[1000];
         User customers[] = new Customer[1000];
@@ -18,6 +19,10 @@ public class test {
         store.addUser(admin1);
         store.addUser(admin2);
         store.addUser(admin3);
+        Item item1 = new ElectronicItem(1, "Laptop", 999.99, 10, 2);
+        Item item2 = new GroceryItem(2, "Milk", 2.99,   50, "2024-12-31");
+        store.addItem(item1);
+        store.addItem(item2);
 System.out.println("Welcome to " + store.getName());
     do{
     System.out.println("1. create account"+"\n"+
@@ -30,14 +35,20 @@ System.out.println("Welcome to " + store.getName());
             String username = sc.next();
             System.out.print("Enter password: ");
             String password = sc.next();
+            System.out.println("Enter your email: " );
+            String email = sc.next();
+            System.out.println("Enter your location: " );
+            String location = sc.next();
             Account account = new Account(username, password);
             for (int i = 0; i < accounts.length; i++) {
                 if (accounts[i] == null) {
                     accounts[i] = account;
-                    User newCustomer = new Customer(i, username, username + "@example.com", "Unknown", account);
+                    User newCustomer = new Customer(i,username, email, location, account);
                     customers[i] = newCustomer;
                     newCustomer.setAccount(account);
                     store.addUser(newCustomer);
+                    
+                    store.saveUsersToFile();
                     break;
                     
                 }
@@ -123,11 +134,11 @@ System.out.println("Welcome to " + store.getName());
                     break;
 
                 case 4:
-                    System.out.print("Enter item ID to search: ");
-                    int searchId = sc.nextInt();
+                    System.out.print("Enter item name to search: ");
+                    String searchName = sc.next();
                     sc.nextLine();
 
-                    Item found = store.searchItem(searchId);
+                    Item found = store.searchItem(searchName);
                     if (found != null) {
                         System.out.println("Item found: " + found);
                     } else {
@@ -152,12 +163,6 @@ System.out.println("Welcome to " + store.getName());
                         } else if (user instanceof Customer) {
                             System.out.println("Customer access");
                             System.out.println("Welcome, " + user.getUsername() + "!");
-                            System.out.println("Enter your email: " );
-                            String email = sc.next();
-                            System.out.println("Enter your location: " );
-                            String location = sc.next();
-                            ((Customer) user).setLocation(location);
-                            ((Customer) user).setEmail(email);
                                     do {
             System.out.println("\n===== CUSTOMER MENU =====");
             System.out.println("1. View all items");
@@ -175,26 +180,36 @@ System.out.println("Welcome to " + store.getName());
                     break;
 
                 case 2:
-                    System.out.print("Enter item ID to search: ");
-                    int searchId = sc.nextInt();
-                  
+   System.out.print("Enter item name to add to cart: ");
+                    String itemName = sc.next();
+                    
 
-                    Item found = store.searchItem(searchId);
-                    if (found != null) {
-                        System.out.println("Item found: " + found);
+                    Item item = store.searchItem(itemName);
+                    if (item != null) {
+                        item.getDetails();
+                        System.out.println("add to cart? (yes/no)");
+                        String response = sc.next();
+                        if (response.equalsIgnoreCase("yes")) {
+                            if (cart.addItem(item)) {
+                                System.out.println("Item added to cart.");
+                            } else {
+                                System.out.println("Cart is full.");
+                            }
+                        } else {
+                            System.out.println("Item not added to cart.");
+                        }
                     } else {
                         System.out.println("Item not found.");
                     }
                     break;
 
                 case 3:
-                    System.out.print("Enter item ID to add to cart: ");
-                    int itemId = sc.nextInt();
-                    
-
-                    Item item = store.searchItem(itemId);
-                    if (item != null) {
-                        if (cart.addItem(item)) {
+                   store.displayAllItems();
+                    System.out.print("Enter item name to add to cart: ");
+                    String addItemName = sc.next();
+                    Item additem = store.searchItem(addItemName);
+                    if (additem != null) {
+                        if (cart.addItem(additem)) {
                             System.out.println("Item added to cart.");
                         } else {
                             System.out.println("Cart is full.");
@@ -202,6 +217,7 @@ System.out.println("Welcome to " + store.getName());
                     } else {
                         System.out.println("Item not found.");
                     }
+
                     break;
 
                 case 4:
@@ -240,6 +256,7 @@ break;
             break;
         case 0:
             System.out.println("Goodbye!");
+            
             return;
         default:
             System.out.println("Invalid choice");

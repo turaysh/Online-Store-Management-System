@@ -1,3 +1,11 @@
+import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+
 class Store implements searchable {
     private String name;
     private Item[] items;
@@ -52,9 +60,9 @@ class Store implements searchable {
         return false;
                 
     }
-    public Item searchItem(int itemId){
+    public Item searchItem(String itemName){
         for(int i = 0; i < nofItem; i++)
-            if(items[i].getId() == itemId)
+            if(items[i].getName().equalsIgnoreCase(itemName))
                 return items[i];
 
         return null;
@@ -85,11 +93,72 @@ class Store implements searchable {
     }
     public User login(String username, String password) {
     for (int i = 0; i < userCount; i++) {
-        if (users[i].getUsername().equals(username) &&
+        if (users[i] != null &&
+            users[i].getUsername() != null &&
+            users[i].getPassword() != null &&
+            users[i].getUsername().equals(username) &&
             users[i].getPassword().equals(password)) {
-            return users[i]; 
+            return users[i];
         }
     }
-    return null; 
+    return null;
+}
+public void saveUsersToFile() {
+    try {
+        PrintWriter writer = new PrintWriter(new FileWriter("users.txt"));
+
+        for (int i = 0; i < userCount; i++) {
+            User u = users[i];
+
+            if (u instanceof Customer) {
+                Customer c = (Customer) u;
+                writer.println("Customer," +
+                        c.getId() + "," +
+                        c.getUsername() + "," +
+                        c.getPassword() + "," +
+                        c.getlocation());
+            }
+            
+        }
+
+        writer.close();
+        System.out.println("Users saved successfully.");
+
+    } catch (IOException e) {
+        System.out.println("Error saving users.");
+    }
+}
+
+public void loadUsersFromFile() {
+    try {
+        File file = new File("users.txt");
+        Scanner reader = new Scanner(file);
+
+        while (reader.hasNextLine()) {
+            String line = reader.nextLine();
+            String[] parts = line.split(",");
+
+            String type = parts[0];
+
+            if (type.equals("Customer")) {
+                int id = Integer.parseInt(parts[1]);
+                String username = parts[2];
+                String password = parts[3];
+                String location = parts[4];
+                Account account = new Account(username, password);
+                Customer c = new Customer(id, username, password, location, account);
+                userCount++;
+                c.setAccount(account);
+                addUser(c);
+
+            }
+        }
+
+        reader.close();
+        System.out.println("Users loaded successfully.");
+
+    } catch (FileNotFoundException e) {
+        System.out.println("No previous users found.");
+    }
 }
 }

@@ -35,16 +35,14 @@ class ShoppingCart implements searchable  {
 
         return total;
     }
-   public int countItemRecursive(int index) {
-    if (index >= count) {
-        return 0; 
+public int countItemRecursive(int index) {
+    // Base case
+    if (index >= nofItem) {
+        return 0;
     }
 
-    if (items[index] != null) {
-        return 1 + countItemRecursive(index + 1);
-    } else {
-        return countItemRecursive(index + 1);
-    }
+    // Recursive case
+    return 1 + countItemRecursive(index + 1);
 }
 
     public void clearCart(){
