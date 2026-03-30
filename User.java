@@ -9,9 +9,7 @@ public abstract class User {
         this.email = email;
         this.id++;
     }
-    public String getRole(){
-        return "User";
-    }
+    public abstract String getRole();
     public int getId() {
         return id;
     }

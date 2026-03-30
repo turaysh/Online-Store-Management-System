@@ -23,7 +23,17 @@ class Order{
     public double calculateTotlaOrder(){
         return shoppingCart.calculateTotal();
     }
-    public void printOrder(){}
+    public void printOrder(){
+        System.out.println("Order ID: " + orderId);
+        System.out.println("Items:");
+        for (Item item : shoppingCart.getItems()) {
+            if (item != null) {
+                System.out.println("- " + item.getName() + ": $" + item.getPrice());
+            }
+        }
+        System.out.println("Total Amount: $" + totalAmount);
+        System.out.println("Status: " + status);
+    }
     public int getId() {
         return orderId;
     }

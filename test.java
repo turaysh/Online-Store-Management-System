@@ -3,10 +3,9 @@ public class test {
     public static void main(String[] args) { 
         Scanner sc = new Scanner(System.in);
         Store store = new Store("My Store");
-        store.loadUsersFromFile();
         ShoppingCart cart = new ShoppingCart();
         User admin1 = new Admin(12345678,"Ahmed","ahmed@example.com",5000);
-        User admin2 = new Admin(22345678,"Abdulmalik","abdulmalik@example.com",4000);
+        User admin2 = new Admin(22345678,"Malik","abdulmalik@example.com",4000);
         User admin3 = new Admin(32345678,"Bader","bader@example.com",2000);
         Account adminAccount1 = new Account("Ahmed123", "092233");
         Account adminAccount2 = new Account("Abdulmalik123", "093344");    
@@ -41,7 +40,6 @@ System.out.println("Welcome to " + store.getName());
             User newCustomer = new Customer(store.getNextUserId(), username, email, location, account);
             newCustomer.setAccount(account);
             store.addUser(newCustomer);
-            store.saveUsersToFile();
             System.out.println("Account created successfully!");
                     
                 break;
@@ -80,8 +78,6 @@ System.out.println("Welcome to " + store.getName());
                     }
                     System.out.print("Enter item ID: ");
                     int id = sc.nextInt();
-                    sc.nextLine();
-
                     System.out.print("Enter item name: ");
                     String name = sc.nextLine();
                     System.out.println("enter item stock ");
@@ -91,7 +87,6 @@ System.out.println("Welcome to " + store.getName());
                         if (itemType == 1) {
                     System.out.print("Enter warranty years: ");
                     int warranty = sc.nextInt();
-                    sc.nextLine();
 
                     Item item = new ElectronicItem(id, name, price, stock, warranty);
 
@@ -114,7 +109,6 @@ System.out.println("Welcome to " + store.getName());
                 case 3:
                     System.out.print("Enter item ID to remove: ");
                     int removeId = sc.nextInt();
-                    sc.nextLine();
 
                     if (store.removeItem(removeId)) {
                         System.out.println("Item removed successfully.");
@@ -126,7 +120,6 @@ System.out.println("Welcome to " + store.getName());
                 case 4:
                     System.out.print("Enter item name to search: ");
                     String searchName = sc.next();
-                    sc.nextLine();
 
                     Item found = store.searchItem(searchName);
                     if (found != null) {
@@ -137,7 +130,7 @@ System.out.println("Welcome to " + store.getName());
                     break;
 
                 case 5:
-                    System.out.println("Total items = " + cart.countItemRecursive(0));
+                    System.out.println("Total items = " + store.countAvalibleItems());
                     break;
 
                 case 0:
