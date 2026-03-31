@@ -14,7 +14,7 @@ public class Admin extends Employee {
         return store.removeItem(itemId);
     }
     public boolean updateStock(Store store, int itemId, int newStock) {
-        return store.updateStoke(itemId, newStock);
+        return store.updateStock(itemId, newStock);
     }
 
 }

@@ -16,17 +16,22 @@ public class test {
         store.addUser(admin1);
         store.addUser(admin2);
         store.addUser(admin3);
-        Item item1 = new ElectronicItem(1, "Laptop", 999.99, 10, 2);
+        Item item1 = new ElectronicItem(1, "Laptop", 999.99, 1, 2);
         Item item2 = new GroceryItem(2, "Milk", 2.99,   50, "2024-12-31");
         store.addItem(item1);
         store.addItem(item2);
 System.out.println("Welcome to " + store.getName());
+    int choice;
     do{
+
+
     System.out.println("1. create account"+"\n"+
-                       "2. login"+"\n"+
+                    "2. login"+"\n"+
                        "0. Exit");
     System.out.print("Enter choice: ");
-    switch (sc.nextInt()) {
+        choice = sc.nextInt();
+    
+    switch (choice) {
         case 1:
             System.out.print("Enter username: ");
             String username = sc.next();
@@ -63,7 +68,7 @@ System.out.println("Welcome to " + store.getName());
             System.out.println("5. Count items recursively");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
-            int choice = sc.nextInt();
+            choice = sc.nextInt();
 
             switch (choice) {
                 case 1:
@@ -141,7 +146,7 @@ System.out.println("Welcome to " + store.getName());
                     System.out.println("Invalid choice.");
             }
 
-        } while (sc.nextInt() != 0);
+        } while (choice != 0);
                             break;
                         } else if (user instanceof Customer) {
                             System.out.println("Customer access");
@@ -153,9 +158,10 @@ System.out.println("Welcome to " + store.getName());
             System.out.println("3. Add item to cart");
             System.out.println("4. View cart");
             System.out.println("5. Checkout");
+            System.out.println("6. View orders");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
-           int  choice = sc.nextInt();
+           choice = sc.nextInt();
          
             switch (choice) {
                 case 1:
@@ -193,7 +199,12 @@ System.out.println("Welcome to " + store.getName());
                     Item additem = store.searchItem(addItemName);
                     if (additem != null) {
                         if (cart.addItem(additem)) {
-                            System.out.println("Item added to cart.");
+                            if(additem.getStock() == 0) {
+                                System.out.println("Sorry, this item is out of stock.");
+                                cart.removeItem(additem.getId());
+                            } else {
+                                System.out.println("Item added to cart.");
+                            }
                         } else {
                             System.out.println("Cart is full.");
                         }
@@ -210,14 +221,27 @@ System.out.println("Welcome to " + store.getName());
                 case 5:
                     if (cart.countItemRecursive(0) > 0) {
                         Order order = new Order(user, cart);
-                        System.out.println("Order placed successfully.");
                         System.out.println(order);
-                        cart = new ShoppingCart(); // empty cart after checkout
+                        System.out.println("type 1 to confirm order, type 2 to cancel order");
+                        int confirmChoice = sc.nextInt();
+                        if (confirmChoice == 1) {
+                            System.out.println("Order placed successfully.");
+                            ((Customer) user).addOrder(order);
+                            store.reduceStockFromCart(cart);
+                            cart.clearCart();
+                            
+                        } else {
+                            System.out.println("Order cancelled.");
+                        }
                     } else {
                         System.out.println("Your cart is empty.");
                     }
                     break;
-
+                    case 6:
+                    System.out.println("Your Orders:");
+                    
+                    ((Customer) user).viewOrders(); 
+                    break;
                 case 0:
                     System.out.println("Logging out...");
                     break;
@@ -226,7 +250,7 @@ System.out.println("Welcome to " + store.getName());
                     System.out.println("Invalid choice.");
             }
 
-        } while (sc.nextInt() != 0);
+        } while (choice != 0);
 break;
                         }
                     }
@@ -244,6 +268,6 @@ break;
         default:
             System.out.println("Invalid choice");
     }
-    } while (true);
+    } while (choice != 0);
     }
 }

@@ -70,4 +70,17 @@ public Item searchByName(String name) {
         }
     }
     return null;
-}}
+}
+public String getStringItems() {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < nofItem; i++) {
+        if (items[i] != null) {
+            sb.append(items[i].getName()).append(", ");
+        }
+    }
+    return sb.length() > 0 ? sb.substring(0, sb.length() - 2) : "";
+}
+public int getNofItem() {
+    return nofItem;
+}
+}

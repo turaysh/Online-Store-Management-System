@@ -1,7 +1,6 @@
-class Order{
+class Order {
     private int orderId;
     private Item[] items;
-    private int count;
     private double totalAmount;
     private String status;
     private ShoppingCart shoppingCart;
@@ -10,30 +9,33 @@ class Order{
     public Order(int orderId, String status) {
         this.orderId = orderId;
         this.status = status;
-       
-        
     }
+
     public Order(User customer, ShoppingCart shoppingCart) {
-        this.shoppingCart = shoppingCart;
         this.customer = customer;
-        this.totalAmount = calculateTotlaOrder();
-        Item[] items = shoppingCart.getItems(); 
-        this.totalAmount = calculateTotlaOrder();
+        this.shoppingCart = shoppingCart;
+        this.items = shoppingCart.getItems();
+        this.totalAmount = calculateTotalOrder();
     }
-    public double calculateTotlaOrder(){
+
+    public double calculateTotalOrder() {
         return shoppingCart.calculateTotal();
     }
-    public void printOrder(){
-        System.out.println("Order ID: " + orderId);
-        System.out.println("Items:");
-        for (Item item : shoppingCart.getItems()) {
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Order ID: ").append(orderId).append("\n");
+        sb.append("Items:\n");
+        for (Item item : items) {
             if (item != null) {
-                System.out.println("- " + item.getName() + ": $" + item.getPrice());
+                sb.append("- ").append(item.getName()).append(": $").append(item.getPrice()).append("\n");
             }
         }
-        System.out.println("Total Amount: $" + totalAmount);
-        System.out.println("Status: " + status);
+        sb.append("Total Amount: $").append(totalAmount).append("\n");
+        sb.append("Status: ").append(status).append("\n");
+        return sb.toString();
     }
+
     public int getId() {
         return orderId;
     }

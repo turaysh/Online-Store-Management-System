@@ -42,5 +42,6 @@ public String getDetails(){
 public double calculateDiscount(double percentage){
     return getPrice() * (percentage / 100);
 }
+
     }
 
