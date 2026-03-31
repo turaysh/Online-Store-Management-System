@@ -36,8 +36,11 @@ public abstract class Item {
     public void setId(int itemId) {
         this.itemId = itemId;
     }
-public String getDetails(){
-    return "ID: " + itemId + ", Name: " + name + ", Price: $" + price + ", Stock: " + stock;
+public String getDetails() {
+    return "ID: " + itemId +
+           ", Name: " + name +
+           ", Price: " + price +
+           ", Stock: " + stock;
 }
 public double calculateDiscount(double percentage){
     return getPrice() * (percentage / 100);

@@ -66,7 +66,14 @@ public boolean removeItem(int itemId) {
     }
     return false;
 }
-
+public boolean itemIdExists(int id) {
+    for (int i = 0; i < nofItem; i++) {
+        if (items[i] != null && items[i].getId() == id) {
+            return true;
+        }
+    }
+    return false;
+}
     public boolean updateStock(int itemId, int newStock) {
         for (int i = 0; i < nofItem; i++) {
             if (items[i].getId() == itemId) {

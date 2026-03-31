@@ -121,6 +121,10 @@ System.out.println("==================================\n");
                     System.out.print("Enter item ID: ");
                     int id = sc.nextInt();
                     sc.nextLine();
+                    if (store.itemIdExists(id)) {
+                    System.out.println("Item ID already exists.");
+                   break;
+                    }
                     System.out.print("Enter item name: ");
                     String itemName = sc.nextLine();
                     System.out.println("enter item stock ");
@@ -130,7 +134,6 @@ System.out.println("==================================\n");
                         if (itemType == 1) {
                     System.out.print("Enter warranty years: ");
                     int warranty = sc.nextInt();
-
                     Item item = new ElectronicItem(id, itemName, price, stock, warranty);
 
                     if (store.addItem(item)) {
@@ -195,9 +198,10 @@ System.out.println("==================================\n");
             System.out.println("1. View all items");
             System.out.println("2. Search item by name");
             System.out.println("3. Add item to cart");
-            System.out.println("4. View cart");
-            System.out.println("5. Checkout");
-            System.out.println("6. View orders");
+            System.out.println("4. Remove item from cart");
+            System.out.println("5. View cart");
+            System.out.println("6. Checkout");
+            System.out.println("7. View orders");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
            choice = sc.nextInt();
@@ -252,12 +256,22 @@ System.out.println("==================================\n");
                     }
 
                     break;
-
                 case 4:
+                 cart.displayCartItems();
+                System.out.print("Enter item ID to remove from cart: ");
+                int removeId = sc.nextInt();
+
+                if (cart.removeItem(removeId)) {
+               System.out.println("Item removed from cart.");
+               } else {
+                System.out.println("Item not found in cart.");
+            }
+             break;
+                case 5:
                     cart.displayCartItems();
                     break;
 
-                case 5:
+                case 6:
                     if (cart.countItemRecursive(0) > 0) {
                         Order order = new Order(user, cart);
                         System.out.println(order);
@@ -277,7 +291,7 @@ System.out.println("==================================\n");
                         System.out.println("Your cart is empty.");
                     }
                     break;
-                    case 6:
+                    case 7:
                     System.out.println("Your Orders:");
                     
                     ((Customer) user).viewOrders(); 

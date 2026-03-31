@@ -12,14 +12,18 @@ class ShoppingCart implements searchable  {
         items[nofItem++] = item;
         return true;
     }
-    public boolean removeItem(int itemId){
-        for(int i = 0; i < nofItem; i++)
-            if(items[i].getId() == itemId){
-                items[i] = null;
-                return true;
+    public boolean removeItem(int itemId) {
+    for (int i = 0; i < nofItem; i++) {
+        if (items[i] != null && items[i].getId() == itemId) {
+            for (int j = i; j < nofItem - 1; j++) {
+                items[j] = items[j + 1];
             }
-        return false;
+            items[--nofItem] = null;
+            return true;
+        }
     }
+    return false;
+}
     public Item searchItem(int itemId){
         for(int i = 0; i < nofItem; i++)
             if(items[i].getId() == itemId)
