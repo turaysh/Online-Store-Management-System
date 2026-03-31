@@ -86,7 +86,7 @@ public boolean itemIdExists(int id) {
 
     public void displayAllItems() {
         for (int i = 0; i < nofItem; i++) {
-            System.out.println(items[i].getDetails());
+            System.out.println(items[i].toString());
         }
     }
 

@@ -36,7 +36,7 @@ public abstract class Item {
     public void setId(int itemId) {
         this.itemId = itemId;
     }
-public String getDetails() {
+public String toString() {
     return "ID: " + itemId +
            ", Name: " + name +
            ", Price: " + price +

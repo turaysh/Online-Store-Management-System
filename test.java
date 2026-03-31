@@ -153,6 +153,7 @@ System.out.println("==================================\n");
                     break;
 
                 case 3:
+                    store.displayAllItems();
                     System.out.print("Enter item ID to remove: ");
                     int removeId = sc.nextInt();
 
@@ -218,7 +219,7 @@ System.out.println("==================================\n");
     Item item = store.searchByName(itemName);
 
     if (item != null) {
-        System.out.println(item.getDetails());
+        System.out.println(item.toString());
         System.out.println("add to cart? (yes/no)");
         String response = sc.next();
 

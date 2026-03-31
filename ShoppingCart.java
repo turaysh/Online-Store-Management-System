@@ -12,7 +12,7 @@ class ShoppingCart implements searchable  {
         items[nofItem++] = item;
         return true;
     }
-    public boolean removeItem(int itemId) {
+   public boolean removeItem(int itemId) {
     for (int i = 0; i < nofItem; i++) {
         if (items[i] != null && items[i].getId() == itemId) {
             for (int j = i; j < nofItem - 1; j++) {
@@ -24,12 +24,24 @@ class ShoppingCart implements searchable  {
     }
     return false;
 }
-    public Item searchItem(int itemId){
-        for(int i = 0; i < nofItem; i++)
-            if(items[i].getId() == itemId)
-                return items[i];
-        return null;
+
+public Item searchItem(int itemId) {
+    for (int i = 0; i < nofItem; i++) {
+        if (items[i] != null && items[i].getId() == itemId) {
+            return items[i];
+        }
     }
+    return null;
+}
+public int countItemRecursive(int index) {
+    if (index >= nofItem) {
+        return 0;
+    }
+    if (items[index] == null) {
+        return countItemRecursive(index + 1);
+    }
+    return 1 + countItemRecursive(index + 1);
+}
 public double calculateTotal(){
     double total = 0;
     for(int i = 0; i < nofItem; i++) {
@@ -37,12 +49,6 @@ public double calculateTotal(){
             total += items[i].getPrice();
     }
     return total;
-}
-public int countItemRecursive(int index) {
-    if (index >= nofItem) {
-        return 0;
-    }
-    return 1 + countItemRecursive(index + 1);
 }
     public void clearCart(){
         for(int i =0; i < nofItem; i++){
