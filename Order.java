@@ -12,11 +12,13 @@ class Order {
     }
 
     public Order(User customer, ShoppingCart shoppingCart) {
-        this.customer = customer;
-        this.shoppingCart = shoppingCart;
-        this.items = shoppingCart.getItems();
-        this.totalAmount = calculateTotalOrder();
-    }
+    this.customer = customer;
+    this.shoppingCart = shoppingCart;
+    this.items = shoppingCart.getItems();
+    this.totalAmount = calculateTotalOrder();
+    this.status = "Confirmed";
+    this.orderId = (int)(Math.random() * 10000) + 1;
+}
 
     public double calculateTotalOrder() {
         return shoppingCart.calculateTotal();
