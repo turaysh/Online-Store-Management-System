@@ -20,6 +20,29 @@ class Store implements searchable {
         }
         return false;
     }
+    public boolean usernameExists(String username) {
+    for (int i = 0; i < userCount; i++) {
+        if (users[i] != null &&
+            users[i].getUsername() != null &&
+            users[i].getUsername().equalsIgnoreCase(username)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+public boolean isValidUsername(String username) {
+    return username != null &&
+           username.length() >= 4 &&
+           !username.contains(" ") &&
+           username.matches("[A-Za-z0-9_]+");
+}
+
+public boolean isValidPassword(String password) {
+    return password != null &&
+           password.length() >= 6 &&
+           password.matches(".*\\d.*");
+}
 
     public int getNextUserId() {
         return userCount + 1;
@@ -52,13 +75,6 @@ public boolean removeItem(int itemId) {
             }
         }
         return false;
-    }
-
-    public Item searchItem(String itemName) {
-        for (int i = 0; i < nofItem; i++) {
-            if (items[i].getName().equalsIgnoreCase(itemName)) return items[i];
-        }
-        return null;
     }
 
     public void displayAllItems() {
@@ -100,7 +116,10 @@ public Item searchItemById(int itemId) {
     return null;
 }
     public Item searchByName(String name) {
-        return searchItem(name);
+                for (int i = 0; i < nofItem; i++) {
+            if (items[i].getName().equalsIgnoreCase(name)) return items[i];
+        }
+        return null;
     }
     public void reduceStockFromCart(ShoppingCart cart) {
     Item[] cartItems = cart.getItems();

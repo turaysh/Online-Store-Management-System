@@ -1,11 +1,9 @@
 class ShoppingCart implements searchable  {
     private Item[] items;
     private int nofItem;
-    private int count;
 
     public ShoppingCart(){
         items = new Item[100];
-        count = 0;
         nofItem = 0;
     }
     public boolean addItem(Item item){
@@ -28,23 +26,20 @@ class ShoppingCart implements searchable  {
                 return items[i];
         return null;
     }
-    public double calculateTotal(){
-        double total=0;
-        for(int i = 0; i < nofItem; i++)
+public double calculateTotal(){
+    double total = 0;
+    for(int i = 0; i < nofItem; i++) {
+        if(items[i] != null)
             total += items[i].getPrice();
-
-        return total;
     }
+    return total;
+}
 public int countItemRecursive(int index) {
-    // Base case
     if (index >= nofItem) {
         return 0;
     }
-
-    // Recursive case
     return 1 + countItemRecursive(index + 1);
 }
-
     public void clearCart(){
         for(int i =0; i < nofItem; i++){
             items[i] = null;

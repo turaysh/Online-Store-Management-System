@@ -6,17 +6,12 @@ class Order {
     private ShoppingCart shoppingCart;
     private User customer;
 
-    public Order(int orderId, String status) {
-        this.orderId = orderId;
-       this.status = "Confirmed";
-    }
-
     public Order(User customer, ShoppingCart shoppingCart) {
     this.customer = customer;
     this.shoppingCart = shoppingCart;
     this.items = shoppingCart.getItems();
     this.totalAmount = calculateTotalOrder();
-    this.status = "Confirmed";
+    this.status = "Processing";
     this.orderId = (int)(Math.random() * 10000) + 1;
 }
 
@@ -37,6 +32,12 @@ class Order {
         sb.append("Status: ").append(status).append("\n");
         return sb.toString();
     }
+    public void confirmOrder() {
+    this.status = "Confirmed";
+}
+public String getStatus() {
+    return status;
+}
 
     public int getId() {
         return orderId;

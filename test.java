@@ -32,21 +32,59 @@ System.out.println("Welcome to " + store.getName());
     
     switch (choice) {
         case 1:
-            System.out.print("Enter username: ");
-            String username = sc.next();
-            System.out.print("Enter password: ");
-            String password = sc.next();
-            System.out.println("Enter your email: " );
-            String email = sc.next();
-            System.out.println("Enter your location: " );
-            String location = sc.next();
-            Account account = new Account(username, password);
-            User newCustomer = new Customer(store.getNextUserId(), username, email, location, account);
-            newCustomer.setAccount(account);
-            store.addUser(newCustomer);
-            System.out.println("Account created successfully!");
-                    
-                break;
+            System.out.println("===== Account Creation Rules =====");
+System.out.println("Username:");
+System.out.println("- At least 4 characters");
+System.out.println("- No spaces");
+System.out.println("- Only letters, numbers, and underscore (_)");
+
+System.out.println("\nPassword:");
+System.out.println("- At least 6 characters");
+System.out.println("- Must contain at least one number");
+System.out.println("==================================\n");
+    System.out.print("Enter username: ");
+    String username = sc.next();
+
+    if (!store.isValidUsername(username)) {
+        System.out.println("Invalid username. It must be at least 4 characters, contain no spaces, and only use letters, numbers, or underscore.");
+        break;
+    }
+
+    if (store.usernameExists(username)) {
+        System.out.println("This username already exists. Please choose another one.");
+        break;
+    }
+
+    System.out.print("Enter password: ");
+    String password = sc.next();
+
+    if (!store.isValidPassword(password)) {
+        System.out.println("Invalid password. It must be at least 6 characters and contain at least one number.");
+        break;
+    }
+
+    sc.nextLine();
+
+    System.out.print("Enter your name: ");
+    String name = sc.nextLine();
+
+    System.out.print("Enter your email: ");
+    String email = sc.next();
+
+    sc.nextLine();
+
+    System.out.print("Enter your location: ");
+    String location = sc.nextLine();
+
+    Account account = new Account(username, password);
+    Customer newCustomer = new Customer(store.getNextUserId(), name, email, location, account);
+
+    if (store.addUser(newCustomer)) {
+        System.out.println("Account created successfully!");
+    } else {
+        System.out.println("Failed to create account.");
+    }
+    break;
         case 2:
             System.out.print("Enter username: ");
             String loginUsername = sc.next();
@@ -84,7 +122,7 @@ System.out.println("Welcome to " + store.getName());
                     int id = sc.nextInt();
                     sc.nextLine();
                     System.out.print("Enter item name: ");
-                    String name = sc.nextLine();
+                    String itemName = sc.nextLine();
                     System.out.println("enter item stock ");
                     int stock = sc.nextInt();
                     System.out.print("Enter item price: ");
@@ -93,7 +131,7 @@ System.out.println("Welcome to " + store.getName());
                     System.out.print("Enter warranty years: ");
                     int warranty = sc.nextInt();
 
-                    Item item = new ElectronicItem(id, name, price, stock, warranty);
+                    Item item = new ElectronicItem(id, itemName, price, stock, warranty);
 
                     if (store.addItem(item)) {
                         System.out.println("Item added successfully.");
@@ -102,7 +140,7 @@ System.out.println("Welcome to " + store.getName());
                     }} else if (itemType == 2) {
                         System.out.print("Enter expiration date: ");
                         String expDate = sc.next();
-                        Item item = new GroceryItem(id, name, price, stock, expDate);
+                        Item item = new GroceryItem(id, itemName, price, stock, expDate);
                         if (store.addItem(item)) {
                             System.out.println("Item added successfully.");
                         } else {
@@ -170,34 +208,38 @@ System.out.println("Welcome to " + store.getName());
                     break;
 
                 case 2:
-   System.out.print("Enter item name to add to cart: ");
-                    String itemName = sc.next();
-                    
+    System.out.print("Enter item name to add to cart: ");
+    String itemName = sc.next();
 
-                    Item item = store.searchItem(itemName);
-                    if (item != null) {
-                        item.getDetails();
-                        System.out.println("add to cart? (yes/no)");
-                        String response = sc.next();
-                        if (response.equalsIgnoreCase("yes")) {
-                            if (cart.addItem(item)) {
-                                System.out.println("Item added to cart.");
-                            } else {
-                                System.out.println("Cart is full.");
-                            }
-                        } else {
-                            System.out.println("Item not added to cart.");
-                        }
-                    } else {
-                        System.out.println("Item not found.");
-                    }
-                    break;
+    Item item = store.searchByName(itemName);
 
+    if (item != null) {
+        System.out.println(item.getDetails());
+        System.out.println("add to cart? (yes/no)");
+        String response = sc.next();
+
+        if (response.equalsIgnoreCase("yes")) {
+            if (item.getStock() > 0) {
+                if (cart.addItem(item)) {
+                    System.out.println("Item added to cart.");
+                } else {
+                    System.out.println("Cart is full.");
+                }
+            } else {
+                System.out.println("Sorry, this item is out of stock.");
+            }
+        } else {
+            System.out.println("Item not added to cart.");
+        }
+    } else {
+        System.out.println("Item not found.");
+    }
+    break;
                 case 3:
-                   store.displayAllItems();
-                    System.out.print("Enter item name to add to cart: ");
-                    String addItemName = sc.next();
-                    Item additem = store.searchItem(addItemName);
+                store.displayAllItems();
+                System.out.print("Enter item ID to add to cart: ");
+                int itemId = sc.nextInt();
+                Item additem = store.searchItemById(itemId);
                     if (additem != null) {
                         if (additem.getStock() > 0) {
                          cart.addItem(additem); 
@@ -226,6 +268,7 @@ System.out.println("Welcome to " + store.getName());
                             ((Customer) user).addOrder(order);
                             store.reduceStockFromCart(cart);
                             cart.clearCart();
+                            order.confirmOrder();
                             
                         } else {
                             System.out.println("Order cancelled.");
