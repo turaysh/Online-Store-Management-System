@@ -3,7 +3,6 @@ public class test {
     public static void main(String[] args) { 
         Scanner sc = new Scanner(System.in);
         Store store = new Store("My Store");
-        ShoppingCart cart = new ShoppingCart();
         User admin1 = new Admin(12345678,"Ahmed","ahmed@example.com",5000);
         User admin2 = new Admin(22345678,"Malik","abdulmalik@example.com",4000);
         User admin3 = new Admin(32345678,"Bader","bader@example.com",2000);
@@ -83,6 +82,7 @@ System.out.println("Welcome to " + store.getName());
                     }
                     System.out.print("Enter item ID: ");
                     int id = sc.nextInt();
+                    sc.nextLine();
                     System.out.print("Enter item name: ");
                     String name = sc.nextLine();
                     System.out.println("enter item stock ");
@@ -123,10 +123,10 @@ System.out.println("Welcome to " + store.getName());
                     break;
 
                 case 4:
-                    System.out.print("Enter item name to search: ");
-                    String searchName = sc.next();
+                    System.out.print("Enter item Id to search: ");
+                    int searchId = sc.nextInt();
 
-                    Item found = store.searchItem(searchName);
+                    Item found = store.searchItemById(searchId);
                     if (found != null) {
                         System.out.println("Item found: " + found);
                     } else {
@@ -135,7 +135,7 @@ System.out.println("Welcome to " + store.getName());
                     break;
 
                 case 5:
-                    System.out.println("Total items = " + store.countAvalibleItems());
+                    System.out.println("Total items = " + store.countAvailableItemsRecursive(0));
                     break;
 
                 case 0:
@@ -152,6 +152,7 @@ System.out.println("Welcome to " + store.getName());
                             System.out.println("Customer access");
                             System.out.println("Welcome, " + user.getUsername() + "!");
                                     do {
+            ShoppingCart cart = ((Customer) user).getCart();
             System.out.println("\n===== CUSTOMER MENU =====");
             System.out.println("1. View all items");
             System.out.println("2. Search item by name");
@@ -198,16 +199,12 @@ System.out.println("Welcome to " + store.getName());
                     String addItemName = sc.next();
                     Item additem = store.searchItem(addItemName);
                     if (additem != null) {
-                        if (cart.addItem(additem)) {
-                            if(additem.getStock() == 0) {
-                                System.out.println("Sorry, this item is out of stock.");
-                                cart.removeItem(additem.getId());
-                            } else {
-                                System.out.println("Item added to cart.");
-                            }
-                        } else {
-                            System.out.println("Cart is full.");
-                        }
+                        if (additem.getStock() > 0) {
+                         cart.addItem(additem); 
+                         System.out.println("Item added to cart.");
+                         } else {
+                            System.out.println("Sorry, this item is out of stock.");
+                      }
                     } else {
                         System.out.println("Item not found.");
                     }

@@ -8,7 +8,7 @@ class Order {
 
     public Order(int orderId, String status) {
         this.orderId = orderId;
-        this.status = status;
+       this.status = "Confirmed";
     }
 
     public Order(User customer, ShoppingCart shoppingCart) {

@@ -33,7 +33,7 @@ class Store implements searchable {
 
 public boolean removeItem(int itemId) {
     for (int i = 0; i < nofItem; i++) {
-        if (items[i].getId() == itemId) {
+        if (items[i] != null && items[i].getId() == itemId) {
             for (int j = i; j < nofItem - 1; j++) {
                 items[j] = items[j + 1];
             }
@@ -101,10 +101,6 @@ public Item searchItemById(int itemId) {
 }
     public Item searchByName(String name) {
         return searchItem(name);
-    }
-
-    public String countAvalibleItems() {
-        throw new UnsupportedOperationException("Unimplemented method 'countAvalibleItems'");
     }
     public void reduceStockFromCart(ShoppingCart cart) {
     Item[] cartItems = cart.getItems();
