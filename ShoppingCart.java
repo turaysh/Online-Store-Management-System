@@ -59,7 +59,8 @@ public double calculateTotal(){
 public void displayCartItems(){
     for(int i = 0; i < nofItem; i++){
         if(items[i] != null){
-            System.out.println(items[i].getName());
+            System.out.println(items[i].getName()+" - Price: " + items[i].getPrice());
+            System.out.println("Total: " + calculateTotal());
         }
     }
 }
