@@ -1,7 +1,6 @@
 class ShoppingCart implements searchable  {
     private Item[] items;
     private int nofItem;
-
     public ShoppingCart(){
         items = new Item[100];
         nofItem = 0;
@@ -76,14 +75,16 @@ public Item searchByName(String name) {
     }
     return null;
 }
-public String getStringItems() {
+public String toString() {
     StringBuilder sb = new StringBuilder();
+    sb.append("Shopping Cart: ");
     for (int i = 0; i < nofItem; i++) {
         if (items[i] != null) {
-            sb.append(items[i].getName()).append(", ");
+            sb.append(items[i].toString()).append("\n");
+            System.out.println(calculateTotal());
         }
     }
-    return sb.length() > 0 ? sb.substring(0, sb.length() - 2) : "";
+    return sb.toString();
 }
 public int getNofItem() {
     return nofItem;

@@ -51,7 +51,7 @@ public void viewOrders() {
             return;
         }
         for (int i = 0; i < countOrder; i++) {
-            System.out.println(orders[i]);
+            orders[i].printOrder();
         }
     }
     public String getRole() {

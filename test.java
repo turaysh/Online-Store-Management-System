@@ -249,6 +249,7 @@ System.out.println("==================================\n");
                         if (additem.getStock() > 0) {
                          cart.addItem(additem); 
                          System.out.println("Item added to cart.");
+                         additem.setStock(additem.getStock() - 1);
                          } else {
                             System.out.println("Sorry, this item is out of stock.");
                       }
@@ -263,6 +264,10 @@ System.out.println("==================================\n");
                 int removeId = sc.nextInt();
 
                 if (cart.removeItem(removeId)) {
+                        Item removedItem = store.searchItemById(removeId);
+                        if (removedItem != null) {
+                            removedItem.setStock(removedItem.getStock() + 1);
+                        }
                System.out.println("Item removed from cart.");
                } else {
                 System.out.println("Item not found in cart.");
@@ -275,7 +280,7 @@ System.out.println("==================================\n");
                 case 6:
                     if (cart.countItemRecursive(0) > 0) {
                         Order order = new Order(user, cart);
-                        System.out.println(order);
+                        System.out.println(cart);
                         System.out.println("type 1 to confirm order, type 2 to cancel order");
                         int confirmChoice = sc.nextInt();
                         if (confirmChoice == 1) {

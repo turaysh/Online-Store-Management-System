@@ -1,45 +1,60 @@
 class Order {
     private int orderId;
     private Item[] items;
+    private int itemCount;
     private double totalAmount;
     private String status;
-    private ShoppingCart shoppingCart;
     private User customer;
 
-    public Order(User customer, ShoppingCart shoppingCart) {
-    this.customer = customer;
-    this.shoppingCart = shoppingCart;
-    this.items = shoppingCart.getItems();
-    this.totalAmount = calculateTotalOrder();
-    this.status = "Processing";
-    this.orderId = (int)(Math.random() * 10000) + 1;
-}
+    public Order(User customer, ShoppingCart cart) {
+        this.customer = customer;
+        this.orderId = (int)(Math.random() * 10000) + 1;
+        this.status = "Processing";
+
+        this.itemCount = cart.getNofItem();
+        this.items = new Item[itemCount];
+
+        Item[] cartItems = cart.getItems();
+
+        for (int i = 0; i < itemCount; i++) {
+            this.items[i] = cartItems[i];
+        }
+
+        this.totalAmount = calculateTotalOrder();
+    }
 
     public double calculateTotalOrder() {
-        return shoppingCart.calculateTotal();
-    }
-
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Order ID: ").append(orderId).append("\n");
-        sb.append("Items:\n");
-        for (Item item : items) {
-            if (item != null) {
-                sb.append("- ").append(item.getName()).append(": $").append(item.getPrice()).append("\n");
+        double total = 0;
+        for (int i = 0; i < itemCount; i++) {
+            if (items[i] != null) {
+                total += items[i].getPrice();
             }
         }
-        sb.append("Total Amount: $").append(totalAmount).append("\n");
-        sb.append("Status: ").append(status).append("\n");
-        return sb.toString();
+        return total;
     }
+
     public void confirmOrder() {
-    this.status = "Confirmed";
-}
-public String getStatus() {
-    return status;
-}
+        this.status = "Confirmed";
+    }
 
     public int getId() {
         return orderId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void printOrder() {
+        System.out.println("Order ID: " + orderId);
+        System.out.println("Customer: " + customer.getName());
+        System.out.println("Status: " + status);
+        System.out.println("Items:");
+        for (int i = 0; i < itemCount; i++) {
+            if (items[i] != null) {
+                System.out.println(items[i]);
+            }
+        }
+        System.out.println("Total Amount: " + totalAmount);
     }
 }
