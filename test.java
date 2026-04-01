@@ -1,6 +1,14 @@
 import java.util.Scanner;
+
+/**
+ * Main driver class for the online store system.
+ * Contains the console-based menu for account creation, login,
+ * admin actions, and customer actions.
+ */
+
 public class test {
-    public static void main(String[] args) { 
+    public static void main(String[] args) {
+        
         Scanner sc = new Scanner(System.in);
         Store store = new Store("My Store");
         User admin1 = new Admin(12345678,"Ahmed","ahmed@example.com",5000);

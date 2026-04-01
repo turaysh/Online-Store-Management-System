@@ -1,3 +1,9 @@
+/**
+ * Represents an employee in the store system.
+ * Inherits common user information from the User class.
+ */
+
+
 public class Employee extends User {
     private double salary;
     public Employee(int id, String name, String email, double salary) {

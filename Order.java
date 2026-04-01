@@ -1,3 +1,8 @@
+/**
+ * Represents a customer order.
+ * It stores order id, items, total amount, status, and the customer.
+ */
+
 class Order {
     private int orderId;
     private Item[] items;
@@ -22,6 +27,11 @@ class Order {
 
         this.totalAmount = calculateTotalOrder();
     }
+        /**
+     * Calculates the total amount of all items in the order.
+     *
+     * return the total order value
+     */
 
     public double calculateTotalOrder() {
         double total = 0;
@@ -32,7 +42,9 @@ class Order {
         }
         return total;
     }
-
+    /**
+     * Confirms the order by changing its status.
+     */
     public void confirmOrder() {
         this.status = "Confirmed";
     }
@@ -44,7 +56,7 @@ class Order {
     public String getStatus() {
         return status;
     }
-
+    // Print all the order informaiton
     public void printOrder() {
         System.out.println("Order ID: " + orderId);
         System.out.println("Customer: " + customer.getName());

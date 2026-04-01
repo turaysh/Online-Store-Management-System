@@ -1,3 +1,9 @@
+/**
+     * Returns the customer's shopping cart.
+     *
+     * return the shopping cart
+     */
+
 public abstract class Item {
     private int itemId;
     private String name;
@@ -24,6 +30,12 @@ public abstract class Item {
     public void setStock(int stock) {
         this.stock = stock;
     }
+    /**
+     * Increases or decreases stock by the given quantity.
+     *
+     * param quantity amount to add to current stock
+     */
+
     public void updateStock(int quantity) {
         this.stock += quantity;
     }
@@ -42,6 +54,13 @@ public String toString() {
            ", Price: " + price +
            ", Stock: " + stock;
 }
+
+/**
+     * Calculates the discount amount based on a percentage.
+     *
+     * param percentage discount percentage
+     * return the discount value
+     */
 public double calculateDiscount(double percentage){
     return getPrice() * (percentage / 100);
 }

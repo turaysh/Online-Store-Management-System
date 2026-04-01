@@ -1,3 +1,8 @@
+/**
+ * Represents the store system.
+ * It manages users, items, login, validation, searching, and stock updates.
+ */
+
 class Store implements searchable {
     private String name;
     private Item[] items;
@@ -12,7 +17,12 @@ class Store implements searchable {
         this.userCount = 0;
         this.users = new User[200];
     }
-
+    /**
+     * Adds a user to the store system.
+     *
+     * param user the user to add
+     * return true if added successfully, otherwise false
+     */
     public boolean addUser(User user) {
         if (userCount < users.length && user != null) {
             users[userCount++] = user;
@@ -20,6 +30,12 @@ class Store implements searchable {
         }
         return false;
     }
+    /**
+     * Checks if a username already exists in the system.
+     *
+     * param username the username to check
+     * return true if it exists, otherwise false
+     */
     public boolean usernameExists(String username) {
     for (int i = 0; i < userCount; i++) {
         if (users[i] != null &&
@@ -30,50 +46,79 @@ class Store implements searchable {
     }
     return false;
 }
-
-public boolean isValidUsername(String username) {
-    return username != null &&
-           username.length() >= 4 &&
-           !username.contains(" ") &&
-           username.matches("[A-Za-z0-9_]+");
-}
-
-public boolean isValidPassword(String password) {
-    return password != null &&
-           password.length() >= 6 &&
-           password.matches(".*\\d.*");
-}
-
-    public int getNextUserId() {
-        return userCount + 1;
+    /**
+         * Validates username rules.
+         *
+         * param username the username to validate
+         * return true if valid, otherwise false
+         */
+    public boolean isValidUsername(String username) {
+        return username != null &&
+            username.length() >= 4 &&
+            !username.contains(" ") &&
+            username.matches("[A-Za-z0-9_]+");
     }
 
-    public boolean addItem(Item item) {
-        if (nofItem >= items.length || item == null) return false;
-        items[nofItem++] = item;
-        return true;
+
+    /**
+     * Validates password rules.
+     *
+     * param password the password to validate
+     * return true if valid, otherwise false
+     */
+
+    public boolean isValidPassword(String password) {
+        return password != null &&
+            password.length() >= 6 &&
+            password.matches(".*\\d.*");
     }
 
-public boolean removeItem(int itemId) {
-    for (int i = 0; i < nofItem; i++) {
-        if (items[i] != null && items[i].getId() == itemId) {
-            for (int j = i; j < nofItem - 1; j++) {
-                items[j] = items[j + 1];
+        public int getNextUserId() {
+            return userCount + 1;
+        }
+
+        public boolean addItem(Item item) {
+            if (nofItem >= items.length || item == null) return false;
+            items[nofItem++] = item;
+            return true;
+        }
+
+    public boolean removeItem(int itemId) {
+        for (int i = 0; i < nofItem; i++) {
+            if (items[i] != null && items[i].getId() == itemId) {
+                for (int j = i; j < nofItem - 1; j++) {
+                    items[j] = items[j + 1];
+                }
+                items[--nofItem] = null;
+                return true;
             }
-            items[--nofItem] = null;
-            return true;
         }
+        return false;
     }
-    return false;
-}
-public boolean itemIdExists(int id) {
-    for (int i = 0; i < nofItem; i++) {
-        if (items[i] != null && items[i].getId() == id) {
-            return true;
+
+    /**
+     * Checks if an item id already exists.
+     *
+     * param id the item id
+     * return true if the id exists, otherwise false
+     */
+
+    public boolean itemIdExists(int id) {
+        for (int i = 0; i < nofItem; i++) {
+            if (items[i] != null && items[i].getId() == id) {
+                return true;
+            }
         }
+        return false;
     }
-    return false;
-}
+
+        /**
+     * Updates the stock of a given item.
+     *
+     * param itemId the item id
+     * param newStock the new stock amount
+     * return true if updated successfully, otherwise false
+     */
     public boolean updateStock(int itemId, int newStock) {
         for (int i = 0; i < nofItem; i++) {
             if (items[i].getId() == itemId) {
@@ -89,7 +134,12 @@ public boolean itemIdExists(int id) {
             System.out.println(items[i].toString());
         }
     }
-
+    /**
+     * Recursively counts items that are still available in stock.
+     *
+     * param index starting index
+     * return number of available items
+     */
     public int countAvailableItemsRecursive(int index) {
         if (index >= nofItem) return 0;
         if (items[index].getStock() > 0) {
@@ -101,7 +151,13 @@ public boolean itemIdExists(int id) {
     public String getName() {
         return name;
     }
-
+      /**
+     * Logs in a user using username and password.
+     *
+     * param username entered username
+     * param password entered password
+     * return the matching user if login succeeds, otherwise null
+     */
     public User login(String username, String password) {
         for (int i = 0; i < userCount; i++) {
             if (users[i] != null &&
@@ -114,20 +170,26 @@ public boolean itemIdExists(int id) {
         }
         return null;
     }
-public Item searchItemById(int itemId) {
-    for (int i = 0; i < nofItem; i++) {
-        if (items[i].getId() == itemId) {
-            return items[i];
+    public Item searchItemById(int itemId) {
+        for (int i = 0; i < nofItem; i++) {
+            if (items[i].getId() == itemId) {
+                return items[i];
+            }
         }
+        return null;
     }
-    return null;
-}
     public Item searchByName(String name) {
                 for (int i = 0; i < nofItem; i++) {
             if (items[i].getName().equalsIgnoreCase(name)) return items[i];
         }
         return null;
     }
+
+    /**
+     * Reduces store stock based on the items found in a shopping cart.
+     *
+     * param cart the shopping cart used for checkout
+     */
     public void reduceStockFromCart(ShoppingCart cart) {
     Item[] cartItems = cart.getItems();
 
