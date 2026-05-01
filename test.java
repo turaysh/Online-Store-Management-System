@@ -11,6 +11,10 @@ public class test {
         
         Scanner sc = new Scanner(System.in);
         Store store = new Store("My Store");
+        
+        // Load items from file if available
+        FileManager.loadItems(store);
+        
         User admin1 = new Admin(12345678,"Ahmed","ahmed@example.com",5000);
         User admin2 = new Admin(22345678,"Malik","abdulmalik@example.com",4000);
         User admin3 = new Admin(32345678,"Bader","bader@example.com",2000);
@@ -330,6 +334,8 @@ break;
             
             break;
         case 0:
+            // Save items to file before exiting
+            FileManager.saveItems(store);
             System.out.println("Goodbye!");
             
             return;

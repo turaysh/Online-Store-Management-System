@@ -5,7 +5,8 @@
 
 class Order {
     private int orderId;
-    private Item[] items;
+    private LinkedListNode<Item> itemsHead;
+    private LinkedListNode<Item> itemsTail;
     private int itemCount;
     private double totalAmount;
     private String status;
@@ -17,31 +18,43 @@ class Order {
         this.status = "Processing";
 
         this.itemCount = cart.getNofItem();
-        this.items = new Item[itemCount];
 
-        Item[] cartItems = cart.getItems();
-
-        for (int i = 0; i < itemCount; i++) {
-            this.items[i] = cartItems[i];
+        // Deep copy items from cart's linked list
+        LinkedListNode<Item> cartCurrent = cart.getItemsHead();
+        while (cartCurrent != null) {
+            if (cartCurrent.getData() != null) {
+                LinkedListNode<Item> newNode = new LinkedListNode<>(cartCurrent.getData());
+                if (itemsHead == null) {
+                    itemsHead = newNode;
+                    itemsTail = newNode;
+                } else {
+                    itemsTail.setNext(newNode);
+                    itemsTail = newNode;
+                }
+            }
+            cartCurrent = cartCurrent.getNext();
         }
 
         this.totalAmount = calculateTotalOrder();
     }
-        /**
+
+    /**
      * Calculates the total amount of all items in the order.
      *
-     * return the total order value
+     * @return the total order value
      */
-
     public double calculateTotalOrder() {
         double total = 0;
-        for (int i = 0; i < itemCount; i++) {
-            if (items[i] != null) {
-                total += items[i].getPrice();
+        LinkedListNode<Item> current = itemsHead;
+        while (current != null) {
+            if (current.getData() != null) {
+                total += current.getData().getPrice();
             }
+            current = current.getNext();
         }
         return total;
     }
+
     /**
      * Confirms the order by changing its status.
      */
@@ -56,16 +69,19 @@ class Order {
     public String getStatus() {
         return status;
     }
-    // Print all the order informaiton
+
+    // Print all the order information
     public void printOrder() {
         System.out.println("Order ID: " + orderId);
         System.out.println("Customer: " + customer.getName());
         System.out.println("Status: " + status);
         System.out.println("Items:");
-        for (int i = 0; i < itemCount; i++) {
-            if (items[i] != null) {
-                System.out.println(items[i]);
+        LinkedListNode<Item> current = itemsHead;
+        while (current != null) {
+            if (current.getData() != null) {
+                System.out.println(current.getData());
             }
+            current = current.getNext();
         }
         System.out.println("Total Amount: " + totalAmount);
     }

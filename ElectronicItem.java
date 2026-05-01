@@ -11,6 +11,10 @@ public class ElectronicItem extends Item {
         this.warrantyMonths = warrantyMonths;
     }
 
+    public int getWarrantyMonths() {
+        return warrantyMonths;
+    }
+
     /**
      * Calculates the discount value for this item.
      *

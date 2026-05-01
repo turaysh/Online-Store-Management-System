@@ -11,6 +11,11 @@ public class GroceryItem extends Item {
         super(itemId, name, price, stock);
         this.expiryDate = expiryDate;
     }
+
+    public String getExpiryDate() {
+        return expiryDate;
+    }
+
 public double calculateDiscount(double percentage) {
         return getPrice() * (percentage / 100);
     }
