@@ -29,8 +29,12 @@ public class test {
         store.addUser(admin3);
         Item item1 = new ElectronicItem(1, "Laptop", 999.99, 1, 2);
         Item item2 = new GroceryItem(2, "Milk", 2.99,   50, "2024-12-31");
-        store.addItem(item1);
-        store.addItem(item2);
+        if (!store.itemIdExists(item1.getId())) {
+            store.addItem(item1);
+        }
+        if (!store.itemIdExists(item2.getId())) {
+            store.addItem(item2);
+        }
 System.out.println("Welcome to " + store.getName());
     int choice;
     do{
@@ -115,6 +119,7 @@ System.out.println("==================================\n");
             System.out.println("3. Remove item");
             System.out.println("4. Search item by ID");
             System.out.println("5. Count items recursively");
+            System.out.println("6. Update item stock");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
             choice = sc.nextInt();
@@ -133,10 +138,6 @@ System.out.println("==================================\n");
                     System.out.print("Enter item ID: ");
                     int id = sc.nextInt();
                     sc.nextLine();
-                    if (store.itemIdExists(id)) {
-                    System.out.println("Item ID already exists.");
-                   break;
-                    }
                     System.out.print("Enter item name: ");
                     String itemName = sc.nextLine();
                     System.out.println("enter item stock ");
@@ -148,18 +149,28 @@ System.out.println("==================================\n");
                     int warranty = sc.nextInt();
                     Item item = new ElectronicItem(id, itemName, price, stock, warranty);
 
-                    if (store.addItem(item)) {
+                    try {
+                    if (((Admin) user).addItem(store, item)) {
                         System.out.println("Item added successfully.");
+                        FileManager.saveItems(store);
                     } else {
                         System.out.println("Failed to add item.");
+                    }
+                    } catch (DuplicateItemException e) {
+                        System.out.println(e.getMessage());
                     }} else if (itemType == 2) {
                         System.out.print("Enter expiration date: ");
                         String expDate = sc.next();
                         Item item = new GroceryItem(id, itemName, price, stock, expDate);
-                        if (store.addItem(item)) {
+                        try {
+                        if (((Admin) user).addItem(store, item)) {
                             System.out.println("Item added successfully.");
+                            FileManager.saveItems(store);
                         } else {
                             System.out.println("Failed to add item.");
+                        }
+                        } catch (DuplicateItemException e) {
+                            System.out.println(e.getMessage());
                         }
                     }
                     break;
@@ -169,8 +180,9 @@ System.out.println("==================================\n");
                     System.out.print("Enter item ID to remove: ");
                     int removeId = sc.nextInt();
 
-                    if (store.removeItem(removeId)) {
+                    if (((Admin) user).removeItem(store, removeId)) {
                         System.out.println("Item removed successfully.");
+                        FileManager.saveItems(store);
                     } else {
                         System.out.println("Item not found.");
                     }
@@ -192,7 +204,23 @@ System.out.println("==================================\n");
                     System.out.println("Total items = " + store.countAvailableItemsRecursive(0));
                     break;
 
+                case 6:
+                    store.displayAllItems();
+                    System.out.print("Enter item ID to update: ");
+                    int updateId = sc.nextInt();
+                    System.out.print("Enter new stock: ");
+                    int newStock = sc.nextInt();
+
+                    if (((Admin) user).updateStock(store, updateId, newStock)) {
+                        System.out.println("Stock updated successfully.");
+                        FileManager.saveItems(store);
+                    } else {
+                        System.out.println("Item not found.");
+                    }
+                    break;
+
                 case 0:
+                    FileManager.saveItems(store);
                     System.out.println("Logging out...");
                     break;
 
@@ -261,7 +289,6 @@ System.out.println("==================================\n");
                         if (additem.getStock() > 0) {
                          cart.addItem(additem); 
                          System.out.println("Item added to cart.");
-                         additem.setStock(additem.getStock() - 1);
                          } else {
                             System.out.println("Sorry, this item is out of stock.");
                       }
@@ -276,10 +303,6 @@ System.out.println("==================================\n");
                 int removeId = sc.nextInt();
 
                 if (cart.removeItem(removeId)) {
-                        Item removedItem = store.searchItemById(removeId);
-                        if (removedItem != null) {
-                            removedItem.setStock(removedItem.getStock() + 1);
-                        }
                System.out.println("Item removed from cart.");
                } else {
                 System.out.println("Item not found in cart.");
@@ -299,6 +322,7 @@ System.out.println("==================================\n");
                             System.out.println("Order placed successfully.");
                             ((Customer) user).addOrder(order);
                             store.reduceStockFromCart(cart);
+                            FileManager.saveItems(store);
                             cart.clearCart();
                             order.confirmOrder();
                             

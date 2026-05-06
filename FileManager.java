@@ -68,8 +68,14 @@ class FileManager {
                 if (line.isEmpty()) continue;
 
                 Item item = parseItemLine(line);
-                if (item != null && store.addItem(item)) {
-                    loadedCount++;
+                if (item != null) {
+                    try {
+                        if (store.addItem(item)) {
+                            loadedCount++;
+                        }
+                    } catch (DuplicateItemException e) {
+                        System.out.println("Skipping duplicate item from file: " + e.getMessage());
+                    }
                 }
             }
             System.out.println("Loaded " + loadedCount + " items from " + ITEM_FILE);

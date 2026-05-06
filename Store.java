@@ -93,6 +93,9 @@ class Store implements searchable {
 
     public boolean addItem(Item item) {
         if (item == null) return false;
+        if (itemIdExists(item.getId())) {
+            throw new DuplicateItemException(item.getId());
+        }
 
         LinkedListNode<Item> newNode = new LinkedListNode<>(item);
         if (itemsHead == null) {
@@ -166,11 +169,31 @@ class Store implements searchable {
     }
 
     public void displayAllItems() {
+        if (itemsHead == null) {
+            System.out.println("No items available.");
+            return;
+        }
         LinkedListNode<Item> current = itemsHead;
         while (current != null) {
             System.out.println(current.getData().toString());
             current = current.getNext();
         }
+    }
+
+    public String getAllItemsText() {
+        if (itemsHead == null) {
+            return "No items available.";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        LinkedListNode<Item> current = itemsHead;
+        while (current != null) {
+            if (current.getData() != null) {
+                sb.append(current.getData().toString()).append("\n");
+            }
+            current = current.getNext();
+        }
+        return sb.toString();
     }
 
     /**

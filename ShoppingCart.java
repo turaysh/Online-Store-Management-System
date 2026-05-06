@@ -141,6 +141,10 @@ class ShoppingCart implements searchable  {
      * Displays all items currently in the cart.
      */
     public void displayCartItems(){
+        if (itemsHead == null) {
+            System.out.println("Cart is empty.");
+            return;
+        }
         LinkedListNode<Item> current = itemsHead;
         while (current != null) {
             if (current.getData() != null) {
@@ -149,6 +153,26 @@ class ShoppingCart implements searchable  {
             }
             current = current.getNext();
         }
+    }
+
+    public String getCartText() {
+        if (itemsHead == null) {
+            return "Cart is empty.";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        LinkedListNode<Item> current = itemsHead;
+        while (current != null) {
+            if (current.getData() != null) {
+                sb.append(current.getData().getName())
+                  .append(" - Price: ")
+                  .append(current.getData().getPrice())
+                  .append("\n");
+            }
+            current = current.getNext();
+        }
+        sb.append("Total: ").append(calculateTotal());
+        return sb.toString();
     }
 
     /**

@@ -6,7 +6,8 @@ import java.util.Scanner;
 class Customer extends User {
     private String location;
     private ShoppingCart shopC;
-    private Order[] orders;
+    private LinkedListNode<Order> ordersHead;
+    private LinkedListNode<Order> ordersTail;
     private int countOrder;
 
     public Customer(int id, String name, String email, String location, Account account) {
@@ -14,7 +15,8 @@ class Customer extends User {
         setAccount(account);
         this.location = location;
         this.shopC = new ShoppingCart();
-        this.orders = new Order[100];
+        this.ordersHead = null;
+        this.ordersTail = null;
         this.countOrder = 0;
     }
     /**
@@ -24,8 +26,17 @@ class Customer extends User {
      * return true if added successfully, otherwise false
      */
     public boolean addOrder(Order order) {
-        if (countOrder >= orders.length || order == null) return false;
-        orders[countOrder++] = order;
+        if (order == null) return false;
+
+        LinkedListNode<Order> newNode = new LinkedListNode<>(order);
+        if (ordersHead == null) {
+            ordersHead = newNode;
+            ordersTail = newNode;
+        } else {
+            ordersTail.setNext(newNode);
+            ordersTail = newNode;
+        }
+        countOrder++;
         return true;
     }
      /**
@@ -35,8 +46,12 @@ class Customer extends User {
      * return the matching order if found, otherwise null
      */
     public Order searchOrder(int orderId) {
-        for (int i = 0; i < countOrder; i++) {
-            if (orders[i].getId() == orderId) return orders[i];
+        LinkedListNode<Order> current = ordersHead;
+        while (current != null) {
+            if (current.getData() != null && current.getData().getId() == orderId) {
+                return current.getData();
+            }
+            current = current.getNext();
         }
         return null;
     }
@@ -64,13 +79,17 @@ class Customer extends User {
         }
         return null;
     }
-public void viewOrders() {
+    public void viewOrders() {
         if (countOrder == 0) {
             System.out.println("You have no orders.");
             return;
         }
-        for (int i = 0; i < countOrder; i++) {
-            orders[i].printOrder();
+        LinkedListNode<Order> current = ordersHead;
+        while (current != null) {
+            if (current.getData() != null) {
+                current.getData().printOrder();
+            }
+            current = current.getNext();
         }
     }
     public String getRole() {
