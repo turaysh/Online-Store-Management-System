@@ -7,23 +7,26 @@ public class StoreGUI {
         Store store = new Store("My Store");
         FileManager.loadItems(store);
 
-        Admin admin = new Admin(12345678, "Ahmed", "ahmed@example.com", 5000);
-        admin.setAccount(new Account("Ahmed123", "092233"));
-        store.addUser(admin);
-
-        Customer customer = new Customer(
-            1,
-            "GUI Customer",
-            "customer@example.com",
-            "Riyadh",
-            new Account("customer1", "123456")
-        );
-        store.addUser(customer);
+        addDefaultUsers(store);
 
         addSampleItems(store);
 
-        InputFrame inputFrame = new InputFrame(store, admin, customer);
+        InputFrame inputFrame = new InputFrame(store);
         inputFrame.setVisible(true);
+    }
+
+    private static void addDefaultUsers(Store store) {
+        User admin1 = new Admin(12345678, "Ahmed", "ahmed@example.com", 5000);
+        User admin2 = new Admin(22345678, "Malik", "abdulmalik@example.com", 4000);
+        User admin3 = new Admin(32345678, "Bader", "bader@example.com", 2000);
+
+        admin1.setAccount(new Account("Ahmed123", "092233"));
+        admin2.setAccount(new Account("Abdulmalik123", "093344"));
+        admin3.setAccount(new Account("Bader123", "094455"));
+
+        store.addUser(admin1);
+        store.addUser(admin2);
+        store.addUser(admin3);
     }
 
     private static void addSampleItems(Store store) {

@@ -92,6 +92,23 @@ class Customer extends User {
             current = current.getNext();
         }
     }
+
+    public String getOrdersText() {
+        if (countOrder == 0) {
+            return "You have no orders.";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        LinkedListNode<Order> current = ordersHead;
+        while (current != null) {
+            if (current.getData() != null) {
+                sb.append(current.getData().getOrderText()).append("\n");
+            }
+            current = current.getNext();
+        }
+        return sb.toString();
+    }
+
     public String getRole() {
         return "Customer";
     }

@@ -85,4 +85,23 @@ class Order {
         }
         System.out.println("Total Amount: " + totalAmount);
     }
+
+    public String getOrderText() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Order ID: ").append(orderId).append("\n");
+        sb.append("Customer: ").append(customer.getName()).append("\n");
+        sb.append("Status: ").append(status).append("\n");
+        sb.append("Items:\n");
+
+        LinkedListNode<Item> current = itemsHead;
+        while (current != null) {
+            if (current.getData() != null) {
+                sb.append(current.getData()).append("\n");
+            }
+            current = current.getNext();
+        }
+
+        sb.append("Total Amount: ").append(totalAmount).append("\n");
+        return sb.toString();
+    }
 }
