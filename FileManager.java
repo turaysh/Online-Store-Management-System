@@ -6,6 +6,19 @@ import java.io.*;
  */
 class FileManager {
     private static final String ITEM_FILE = "items.txt";
+    private static final String USER_FILE = "users.txt";
+
+    /**
+     * Saves all store data to disk: items and customer accounts.
+     *
+     * @param store the store to save
+     * @return true if both files were written successfully, otherwise false
+     */
+    public static boolean saveAll(Store store) {
+        boolean itemsSaved = saveItems(store);
+        boolean usersSaved = saveUsers(store);
+        return itemsSaved && usersSaved;
+    }
 
     /**
      * Saves all items from the store to a text file.
@@ -15,9 +28,12 @@ class FileManager {
      * @return true if saved successfully, otherwise false
      */
     public static boolean saveItems(Store store) {
-        BufferedWriter writer = null;
-        try {
-            writer = new BufferedWriter(new FileWriter(ITEM_FILE));
+        if (store == null) {
+            System.out.println("Unable to save items: store reference is null.");
+            return false;
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ITEM_FILE))) {
             LinkedListNode<Item> current = store.getItemsHead();
             while (current != null) {
                 Item item = current.getData();
@@ -33,14 +49,134 @@ class FileManager {
         } catch (IOException e) {
             System.out.println("Error saving items: " + e.getMessage());
             return false;
-        } finally {
-            try {
-                if (writer != null) {
-                    writer.close();
+        }
+    }
+
+    /**
+     * Saves all customer accounts from the store to a text file.
+     * Format: CUSTOMER|id|name|email|location|username|password
+     *
+     * @param store the store containing users to save
+     * @return true if saved successfully, otherwise false
+     */
+    public static boolean saveUsers(Store store) {
+        if (store == null) {
+            System.out.println("Unable to save users: store reference is null.");
+            return false;
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_FILE))) {
+            LinkedListNode<User> current = store.getUsersHead();
+            while (current != null) {
+                User user = current.getData();
+                if (user instanceof Customer) {
+                    String line = formatUserLine(user);
+                    writer.write(line);
+                    writer.newLine();
                 }
-            } catch (IOException e) {
-                System.out.println("Error closing file: " + e.getMessage());
+                current = current.getNext();
             }
+            System.out.println("Users saved to " + USER_FILE);
+            return true;
+        } catch (IOException e) {
+            System.out.println("Error saving users: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Loads customer accounts from a text file into the store.
+     *
+     * @param store the store to load users into
+     * @return true if loaded successfully, otherwise false
+     */
+    public static boolean loadUsers(Store store) {
+        if (store == null) {
+            System.out.println("Unable to load users: store reference is null.");
+            return false;
+        }
+
+        File file = new File(USER_FILE);
+        if (!file.exists()) {
+            System.out.println("No existing user file found. Starting with default users.");
+            return false;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            int loadedCount = 0;
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+
+                User user = parseUserLine(line);
+                if (user instanceof Customer) {
+                    Customer customer = (Customer) user;
+                    if (!store.usernameExists(customer.getUsername())) {
+                        if (store.addUser(customer)) {
+                            loadedCount++;
+                        }
+                    }
+                }
+            }
+            System.out.println("Loaded " + loadedCount + " users from " + USER_FILE);
+            return true;
+        } catch (IOException e) {
+            System.out.println("Error loading users: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Formats a customer into a string line for file storage.
+     */
+    private static String formatUserLine(User user) {
+        Customer customer = (Customer) user;
+        StringBuilder sb = new StringBuilder();
+        sb.append("CUSTOMER").append("|");
+        sb.append(customer.getId()).append("|");
+        sb.append(customer.getName()).append("|");
+        sb.append(customer.getEmail()).append("|");
+        sb.append(customer.getlocation()).append("|");
+        sb.append(customer.getUsername()).append("|");
+        sb.append(customer.getPassword());
+        return sb.toString();
+    }
+
+    /**
+     * Parses a user record line from the file.
+     */
+    private static User parseUserLine(String line) {
+        if (line == null || line.trim().isEmpty()) {
+            return null;
+        }
+
+        try {
+            String[] parts = line.split("\\|");
+            if (parts.length != 7) {
+                System.out.println("Invalid user record, skipping line: " + line);
+                return null;
+            }
+
+            String type = parts[0].trim();
+            if (!"CUSTOMER".equals(type)) {
+                System.out.println("Unsupported user type, skipping line: " + line);
+                return null;
+            }
+
+            int id = Integer.parseInt(parts[1].trim());
+            String name = parts[2].trim();
+            String email = parts[3].trim();
+            String location = parts[4].trim();
+            String username = parts[5].trim();
+            String password = parts[6].trim();
+
+            Customer customer = new Customer(id, name, email, location, new Account(username, password));
+            return customer;
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid numeric value in user record, skipping line: " + line);
+            return null;
         }
     }
 
@@ -51,18 +187,21 @@ class FileManager {
      * @return true if loaded successfully, otherwise false
      */
     public static boolean loadItems(Store store) {
+        if (store == null) {
+            System.out.println("Unable to load items: store reference is null.");
+            return false;
+        }
+
         File file = new File(ITEM_FILE);
         if (!file.exists()) {
             System.out.println("No existing item file found. Starting fresh.");
             return false;
         }
 
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(ITEM_FILE));
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             int loadedCount = 0;
             String line;
-            
+
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty()) continue;
@@ -83,14 +222,6 @@ class FileManager {
         } catch (IOException e) {
             System.out.println("Error loading items: " + e.getMessage());
             return false;
-        } finally {
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            } catch (IOException e) {
-                System.out.println("Error closing file: " + e.getMessage());
-            }
         }
     }
 
@@ -135,9 +266,14 @@ class FileManager {
      * Parses a line from the file back into an Item object.
      */
     private static Item parseItemLine(String line) {
+        if (line == null || line.trim().isEmpty()) {
+            return null;
+        }
+
         try {
             String[] parts = line.split("\\|");
             if (parts.length < 5) {
+                System.out.println("Invalid item record, skipping line: " + line);
                 return null;
             }
 
@@ -150,14 +286,14 @@ class FileManager {
             switch (type) {
                 case "ELECTRONIC":
                     if (parts.length < 6) {
-                        System.out.println("Error: ElectronicItem requires warranty months");
+                        System.out.println("Invalid ElectronicItem record, skipping line: " + line);
                         return null;
                     }
                     int warranty = Integer.parseInt(parts[5].trim());
                     return new ElectronicItem(id, name, price, stock, warranty);
                 case "GROCERY":
                     if (parts.length < 6) {
-                        System.out.println("Error: GroceryItem requires expiry date");
+                        System.out.println("Invalid GroceryItem record, skipping line: " + line);
                         return null;
                     }
                     String expiry = parts[5].trim();
@@ -168,7 +304,7 @@ class FileManager {
                     };
             }
         } catch (NumberFormatException e) {
-            System.out.println("Error parsing line: " + line);
+            System.out.println("Invalid numeric value in item record, skipping line: " + line);
             return null;
         }
     }

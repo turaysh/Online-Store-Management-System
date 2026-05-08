@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -12,8 +13,9 @@ public class test {
         Scanner sc = new Scanner(System.in);
         Store store = new Store("My Store");
         
-        // Load items from file if available
+        // Load items and customer accounts from files if available
         FileManager.loadItems(store);
+        FileManager.loadUsers(store);
         
         User admin1 = new Admin(12345678,"Ahmed","ahmed@example.com",5000);
         User admin2 = new Admin(22345678,"Malik","abdulmalik@example.com",4000);
@@ -44,8 +46,7 @@ System.out.println("Welcome to " + store.getName());
                     "2. login"+"\n"+
                        "0. Exit");
     System.out.print("Enter choice: ");
-        choice = sc.nextInt();
-    
+        choice = safeReadInt(sc);
     switch (choice) {
         case 1:
             System.out.println("===== Account Creation Rules =====");
@@ -122,7 +123,7 @@ System.out.println("==================================\n");
             System.out.println("6. Update item stock");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
-            choice = sc.nextInt();
+            choice = safeReadInt(sc);
 
             switch (choice) {
                 case 1:
@@ -131,28 +132,28 @@ System.out.println("==================================\n");
 
                 case 2:
                     System.out.println("1. Add Electronic Item\n2. Add grocery Item\n3. go back");
-                    int itemType = sc.nextInt();
+                    int itemType = safeReadInt(sc);
                     if (itemType == 3) {
                         break;
                     }
                     System.out.print("Enter item ID: ");
-                    int id = sc.nextInt();
+                    int id = safeReadInt(sc);
                     sc.nextLine();
                     System.out.print("Enter item name: ");
                     String itemName = sc.nextLine();
                     System.out.println("enter item stock ");
-                    int stock = sc.nextInt();
+                    int stock = safeReadInt(sc);
                     System.out.print("Enter item price: ");
-                    double price = sc.nextDouble();
+                    double price = safeReadDouble(sc);
                         if (itemType == 1) {
                     System.out.print("Enter warranty years: ");
-                    int warranty = sc.nextInt();
+                    int warranty = safeReadInt(sc);
                     Item item = new ElectronicItem(id, itemName, price, stock, warranty);
 
                     try {
                     if (((Admin) user).addItem(store, item)) {
                         System.out.println("Item added successfully.");
-                        FileManager.saveItems(store);
+                        FileManager.saveAll(store);
                     } else {
                         System.out.println("Failed to add item.");
                     }
@@ -165,7 +166,7 @@ System.out.println("==================================\n");
                         try {
                         if (((Admin) user).addItem(store, item)) {
                             System.out.println("Item added successfully.");
-                            FileManager.saveItems(store);
+                            FileManager.saveAll(store);
                         } else {
                             System.out.println("Failed to add item.");
                         }
@@ -178,11 +179,11 @@ System.out.println("==================================\n");
                 case 3:
                     store.displayAllItems();
                     System.out.print("Enter item ID to remove: ");
-                    int removeId = sc.nextInt();
+                    int removeId = safeReadInt(sc);
 
                     if (((Admin) user).removeItem(store, removeId)) {
                         System.out.println("Item removed successfully.");
-                        FileManager.saveItems(store);
+                        FileManager.saveAll(store);
                     } else {
                         System.out.println("Item not found.");
                     }
@@ -190,7 +191,7 @@ System.out.println("==================================\n");
 
                 case 4:
                     System.out.print("Enter item Id to search: ");
-                    int searchId = sc.nextInt();
+                    int searchId = safeReadInt(sc);
 
                     Item found = store.searchItemById(searchId);
                     if (found != null) {
@@ -207,20 +208,20 @@ System.out.println("==================================\n");
                 case 6:
                     store.displayAllItems();
                     System.out.print("Enter item ID to update: ");
-                    int updateId = sc.nextInt();
+                    int updateId = safeReadInt(sc);
                     System.out.print("Enter new stock: ");
-                    int newStock = sc.nextInt();
+                    int newStock = safeReadInt(sc);
 
                     if (((Admin) user).updateStock(store, updateId, newStock)) {
                         System.out.println("Stock updated successfully.");
-                        FileManager.saveItems(store);
+                        FileManager.saveAll(store);
                     } else {
                         System.out.println("Item not found.");
                     }
                     break;
 
                 case 0:
-                    FileManager.saveItems(store);
+                    FileManager.saveAll(store);
                     System.out.println("Logging out...");
                     break;
 
@@ -245,7 +246,7 @@ System.out.println("==================================\n");
             System.out.println("7. View orders");
             System.out.println("0. Logout");
             System.out.print("Enter your choice: ");
-           choice = sc.nextInt();
+           choice = safeReadInt(sc);
          
             switch (choice) {
                 case 1:
@@ -283,7 +284,7 @@ System.out.println("==================================\n");
                 case 3:
                 store.displayAllItems();
                 System.out.print("Enter item ID to add to cart: ");
-                int itemId = sc.nextInt();
+                int itemId = safeReadInt(sc);
                 Item additem = store.searchItemById(itemId);
                     if (additem != null) {
                         if (additem.getStock() > 0) {
@@ -300,7 +301,7 @@ System.out.println("==================================\n");
                 case 4:
                  cart.displayCartItems();
                 System.out.print("Enter item ID to remove from cart: ");
-                int removeId = sc.nextInt();
+                int removeId = safeReadInt(sc);
 
                 if (cart.removeItem(removeId)) {
                System.out.println("Item removed from cart.");
@@ -317,16 +318,12 @@ System.out.println("==================================\n");
                         Order order = new Order(user, cart);
                         System.out.println(cart);
                         System.out.println("type 1 to confirm order, type 2 to cancel order");
-                        int confirmChoice = sc.nextInt();
+                        int confirmChoice = safeReadInt(sc);
                         if (confirmChoice == 1) {
                             System.out.println("Order placed successfully.");
                             ((Customer) user).addOrder(order);
                             store.reduceStockFromCart(cart);
-                            FileManager.saveItems(store);
-                            cart.clearCart();
-                            order.confirmOrder();
-                            
-                        } else {
+                            FileManager.saveAll(store);
                             System.out.println("Order cancelled.");
                         }
                     } else {
@@ -358,8 +355,8 @@ break;
             
             break;
         case 0:
-            // Save items to file before exiting
-            FileManager.saveItems(store);
+            // Save items and customer accounts to files before exiting
+            FileManager.saveAll(store);
             System.out.println("Goodbye!");
             
             return;
@@ -367,5 +364,27 @@ break;
             System.out.println("Invalid choice");
     }
     } while (choice != 0);
+    }
+
+    private static int safeReadInt(Scanner sc) {
+        while (true) {
+            try {
+                return sc.nextInt();
+            } catch (InputMismatchException ex) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+                sc.nextLine();
+            }
+        }
+    }
+
+    private static double safeReadDouble(Scanner sc) {
+        while (true) {
+            try {
+                return sc.nextDouble();
+            } catch (InputMismatchException ex) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                sc.nextLine();
+            }
+        }
     }
 }

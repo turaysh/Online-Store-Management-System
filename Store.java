@@ -82,7 +82,8 @@ class Store implements searchable {
      * @return true if valid, otherwise false
      */
     public boolean isValidPassword(String password) {
-        return password != null &&
+        return password != null && 
+           !password.contains(" ") &&
             password.length() >= 6 &&
             password.matches(".*\\d.*");
     }
@@ -298,5 +299,14 @@ class Store implements searchable {
      */
     public LinkedListNode<Item> getItemsHead() {
         return itemsHead;
+    }
+
+    /**
+     * Returns the head of the users linked list (for FileManager to iterate).
+     *
+     * @return the head node of the users list
+     */
+    public LinkedListNode<User> getUsersHead() {
+        return usersHead;
     }
 }

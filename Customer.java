@@ -67,7 +67,14 @@ class Customer extends User {
         shopC.displayCartItems();
         System.out.println("Total = " + shopC.calculateTotal());
         System.out.println("If you want to checkout press 1, if you want to clear the cart press 2");
-        int choice = sc.nextInt();
+        int choice;
+        try {
+            choice = sc.nextInt();
+        } catch (java.util.InputMismatchException ex) {
+            System.out.println("Invalid input. Checkout cancelled.");
+            sc.nextLine();
+            return null;
+        }
 
         if (choice == 1) {
             Order order = new Order(this, shopC);

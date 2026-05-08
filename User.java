@@ -44,6 +44,10 @@ public abstract class User {
         return account;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public String getUsername() {
         return account != null ? account.getUsername() : null;
     }

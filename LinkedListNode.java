@@ -1,7 +1,6 @@
 /**
  * Generic node class for linked lists.
  * 
- * @param <T> the type of data stored in the node
  */
 class LinkedListNode<T> {
     private T data;
