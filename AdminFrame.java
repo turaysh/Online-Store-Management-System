@@ -2,11 +2,21 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**
+ * Represents the admin dashboard GUI frame.
+ * It allows the admin to view items, add items, remove items, update stock, and log out.
+ */
 public class AdminFrame extends JFrame {
     private final Store store;
     private final Admin admin;
     private final JTextArea itemsArea;
 
+    /**
+     * Creates the admin dashboard frame and initializes its GUI components.
+     *
+     * @param store the store system used by the admin
+     * @param admin the logged-in admin user
+     */
     public AdminFrame(Store store, Admin admin) {
         this.store = store;
         this.admin = admin;
@@ -26,6 +36,11 @@ public class AdminFrame extends JFrame {
         add(buildMain(), BorderLayout.CENTER);
 
         addWindowListener(new WindowAdapter() {
+            /**
+             * Saves store data and returns to the login frame when the window is closed.
+             *
+             * @param e the window closing event
+             */
             @Override
             public void windowClosing(WindowEvent e) {
                 FileManager.saveAll(store);
@@ -35,6 +50,11 @@ public class AdminFrame extends JFrame {
         });
     }
 
+    /**
+     * Builds the header panel that displays the admin dashboard title and username.
+     *
+     * @return the header panel
+     */
     private JPanel buildHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBorder(BorderFactory.createEmptyBorder(12, 12, 0, 12));
@@ -51,6 +71,11 @@ public class AdminFrame extends JFrame {
         return header;
     }
 
+    /**
+     * Builds the main admin panel that contains the items area and control panel.
+     *
+     * @return the main panel
+     */
     private JPanel buildMain() {
         JPanel main = new JPanel(new BorderLayout(10, 10));
         main.setBorder(BorderFactory.createEmptyBorder(0, 12, 12, 12));
@@ -62,6 +87,11 @@ public class AdminFrame extends JFrame {
         return main;
     }
 
+    /**
+     * Builds the control panel that contains admin action buttons and connects them to events.
+     *
+     * @return the control panel
+     */
     private JPanel buildControlPanel() {
         JPanel controls = new JPanel();
         controls.setLayout(new BoxLayout(controls, BoxLayout.Y_AXIS));
@@ -98,10 +128,17 @@ public class AdminFrame extends JFrame {
         return controls;
     }
 
+    /**
+     * Refreshes the items text area by displaying all store items.
+     */
     private void refreshItems() {
         itemsArea.setText(store.getAllItemsText());
     }
 
+    /**
+     * Opens a dialog that allows the admin to add a new electronic or grocery item.
+     * It handles invalid input and duplicate item exceptions.
+     */
     private void showAddItemDialog() {
         JTextField idField = new JTextField();
         JTextField nameField = new JTextField();
@@ -159,6 +196,10 @@ public class AdminFrame extends JFrame {
         }
     }
 
+    /**
+     * Opens a dialog that allows the admin to remove an item by its ID.
+     * It handles invalid numeric input and missing items.
+     */
     private void showRemoveItemDialog() {
         String input = JOptionPane.showInputDialog(this, "Enter item ID to remove:", "Remove Item", JOptionPane.PLAIN_MESSAGE);
         if (input == null || input.trim().isEmpty()) return;
@@ -176,6 +217,10 @@ public class AdminFrame extends JFrame {
         }
     }
 
+    /**
+     * Opens a dialog that allows the admin to update the stock of an item.
+     * It handles invalid numeric input and missing items.
+     */
     private void showUpdateStockDialog() {
         JTextField idField = new JTextField();
         JTextField stockField = new JTextField();
@@ -203,10 +248,12 @@ public class AdminFrame extends JFrame {
         }
     }
 
+    /**
+     * Saves all store data, closes the admin dashboard, and returns to the login frame.
+     */
     private void logout() {
         FileManager.saveAll(store);
         dispose();
         new LoginFrame(store).setVisible(true);
     }
-
 }

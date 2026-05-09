@@ -4,6 +4,13 @@
  * Mirrors the same setup as test.java (same admins, same sample items).
  */
 public class StoreGUI {
+    /**
+     * Starts the GUI version of the Online Store Management System.
+     * Loads saved data, creates default admin accounts and sample items,
+     * then opens the login frame on the Swing event dispatch thread.
+     *
+     * @param args command-line arguments
+     */
     public static void main(String[] args) {
         Store store = new Store("My Store");
         FileManager.loadItems(store);

@@ -10,6 +10,9 @@ class ShoppingCart implements searchable  {
     private LinkedListNode<Item> itemsTail;
     private int nofItem;
 
+    /**
+     * Creates an empty shopping cart using a linked list.
+     */
     public ShoppingCart(){
         itemsHead = null;
         itemsTail = null;
@@ -155,6 +158,11 @@ class ShoppingCart implements searchable  {
         }
     }
 
+    /**
+     * Builds and returns the cart items as formatted text for GUI display.
+     *
+     * @return a formatted string containing the cart items and total price
+     */
     public String getCartText() {
         if (itemsHead == null) {
             return "Cart is empty.";
@@ -201,6 +209,11 @@ class ShoppingCart implements searchable  {
         return null;
     }
 
+    /**
+     * Returns the shopping cart information as a formatted string.
+     *
+     * @return a string representation of the shopping cart
+     */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Shopping Cart: ");

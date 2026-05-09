@@ -1,7 +1,8 @@
 import java.util.Scanner;
+
 /**
  * Represents a customer in the store system.
- * A customer has a location, a shopping cart, and a list of orders.
+ * A customer has a location, a shopping cart, and a linked list of orders.
  */
 class Customer extends User {
     private String location;
@@ -10,6 +11,15 @@ class Customer extends User {
     private LinkedListNode<Order> ordersTail;
     private int countOrder;
 
+    /**
+     * Creates a new customer with personal information, location, and account.
+     *
+     * @param id the customer ID
+     * @param name the customer name
+     * @param email the customer email
+     * @param location the customer location
+     * @param account the customer's login account
+     */
     public Customer(int id, String name, String email, String location, Account account) {
         super(id, name, email);
         setAccount(account);
@@ -19,11 +29,12 @@ class Customer extends User {
         this.ordersTail = null;
         this.countOrder = 0;
     }
+
     /**
-     * Adds an order to the customer's order list.
+     * Adds an order to the customer's linked list of orders.
      *
-     * param order the order to add
-     * return true if added successfully, otherwise false
+     * @param order the order to add
+     * @return true if the order was added successfully, otherwise false
      */
     public boolean addOrder(Order order) {
         if (order == null) return false;
@@ -39,11 +50,12 @@ class Customer extends User {
         countOrder++;
         return true;
     }
-     /**
-     * Searches for an order using its id.
+
+    /**
+     * Searches for an order in the customer's order history using its ID.
      *
-     * param orderId the order id to search for
-     * return the matching order if found, otherwise null
+     * @param orderId the order ID to search for
+     * @return the matching order if found, otherwise null
      */
     public Order searchOrder(int orderId) {
         LinkedListNode<Order> current = ordersHead;
@@ -55,12 +67,12 @@ class Customer extends User {
         }
         return null;
     }
+
     /**
      * Starts the checkout process for the current cart.
-     * Displays cart details, asks the user for confirmation,
-     * and creates an order if checkout is confirmed.
+     * Displays cart details, asks the user for confirmation, and creates an order if confirmed.
      *
-     * return the created order if checkout succeeds, otherwise null
+     * @return the created order if checkout succeeds, otherwise null
      */
     public Order checkout() {
         Scanner sc = new Scanner(System.in);
@@ -86,6 +98,10 @@ class Customer extends User {
         }
         return null;
     }
+
+    /**
+     * Displays all orders in the customer's order history using console output.
+     */
     public void viewOrders() {
         if (countOrder == 0) {
             System.out.println("You have no orders.");
@@ -100,6 +116,11 @@ class Customer extends User {
         }
     }
 
+    /**
+     * Returns the customer's order history as formatted text for the GUI.
+     *
+     * @return the order history text
+     */
     public String getOrdersText() {
         if (countOrder == 0) {
             return "You have no orders.";
@@ -116,25 +137,46 @@ class Customer extends User {
         return sb.toString();
     }
 
+    /**
+     * Returns the role of this user.
+     *
+     * @return the role name as Customer
+     */
     public String getRole() {
         return "Customer";
     }
 
+    /**
+     * Updates the customer's location.
+     *
+     * @param location the new customer location
+     */
     public void setLocation(String location) {
         this.location = location;
     }
 
+    /**
+     * Returns the customer's location.
+     *
+     * @return the customer location
+     */
     public String getlocation() {
         return location;
     }
 
+    /**
+     * Returns the customer's name.
+     *
+     * @return the customer name
+     */
     public String getName() {
         return super.getName();
     }
+
     /**
      * Returns the customer's shopping cart.
      *
-     * return the shopping cart
+     * @return the shopping cart
      */
     public ShoppingCart getCart() {
         return shopC;

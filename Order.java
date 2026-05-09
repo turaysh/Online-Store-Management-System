@@ -12,6 +12,13 @@ class Order {
     private String status;
     private User customer;
 
+    /**
+     * Creates a new order for the given customer using the items currently in the shopping cart.
+     * The cart items are copied into the order linked list, and the total amount is calculated.
+     *
+     * @param customer the customer who placed the order
+     * @param cart the shopping cart used to create the order
+     */
     public Order(User customer, ShoppingCart cart) {
         this.customer = customer;
         this.orderId = (int)(Math.random() * 10000) + 1;
@@ -62,15 +69,28 @@ class Order {
         this.status = "Confirmed";
     }
 
+    /**
+     * Returns the order ID.
+     *
+     * @return the order ID
+     */
     public int getId() {
         return orderId;
     }
 
+    /**
+     * Returns the current status of the order.
+     *
+     * @return the order status
+     */
     public String getStatus() {
         return status;
     }
 
-    // Print all the order information
+    /**
+     * Prints the complete order details to the console, including the order ID,
+     * customer name, status, ordered items, and total amount.
+     */
     public void printOrder() {
         System.out.println("Order ID: " + orderId);
         System.out.println("Customer: " + customer.getName());
@@ -86,6 +106,11 @@ class Order {
         System.out.println("Total Amount: " + totalAmount);
     }
 
+    /**
+     * Builds and returns the complete order details as formatted text for GUI display.
+     *
+     * @return a formatted string containing the order details
+     */
     public String getOrderText() {
         StringBuilder sb = new StringBuilder();
         sb.append("Order ID: ").append(orderId).append("\n");

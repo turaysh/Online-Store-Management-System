@@ -1,18 +1,18 @@
 import java.io.*;
 
 /**
- * Handles file operations for saving and loading store items.
- * Uses FileWriter, BufferedWriter, FileReader, and BufferedReader.
+ * Handles file operations for saving and loading store items and customer accounts.
+ * Uses text files with BufferedReader and BufferedWriter to support file handling in Phase 2.
  */
 class FileManager {
     private static final String ITEM_FILE = "items.txt";
     private static final String USER_FILE = "users.txt";
 
     /**
-     * Saves all store data to disk: items and customer accounts.
+     * Saves all store data to disk, including items and customer accounts.
      *
      * @param store the store to save
-     * @return true if both files were written successfully, otherwise false
+     * @return true if both item and user files were saved successfully, otherwise false
      */
     public static boolean saveAll(Store store) {
         boolean itemsSaved = saveItems(store);
@@ -22,10 +22,10 @@ class FileManager {
 
     /**
      * Saves all items from the store to a text file.
-     * Format: type|id|name|price|stock
+     * Each item is converted into a formatted text line before saving.
      *
      * @param store the store containing items to save
-     * @return true if saved successfully, otherwise false
+     * @return true if items are saved successfully, otherwise false
      */
     public static boolean saveItems(Store store) {
         if (store == null) {
@@ -54,10 +54,10 @@ class FileManager {
 
     /**
      * Saves all customer accounts from the store to a text file.
-     * Format: CUSTOMER|id|name|email|location|username|password
+     * Only Customer objects are saved because admin accounts are created by the program.
      *
      * @param store the store containing users to save
-     * @return true if saved successfully, otherwise false
+     * @return true if users are saved successfully, otherwise false
      */
     public static boolean saveUsers(Store store) {
         if (store == null) {
@@ -86,9 +86,10 @@ class FileManager {
 
     /**
      * Loads customer accounts from a text file into the store.
+     * Invalid or duplicate records are skipped to keep the store data valid.
      *
      * @param store the store to load users into
-     * @return true if loaded successfully, otherwise false
+     * @return true if the user file is read successfully, otherwise false
      */
     public static boolean loadUsers(Store store) {
         if (store == null) {
@@ -129,7 +130,11 @@ class FileManager {
     }
 
     /**
-     * Formats a customer into a string line for file storage.
+     * Formats a customer object into one line that can be saved in the users file.
+     * Format: CUSTOMER|id|name|email|location|username|password
+     *
+     * @param user the customer user to format
+     * @return a formatted string that represents the customer account
      */
     private static String formatUserLine(User user) {
         Customer customer = (Customer) user;
@@ -145,7 +150,11 @@ class FileManager {
     }
 
     /**
-     * Parses a user record line from the file.
+     * Parses one line from the users file and converts it into a Customer object.
+     * Invalid records return null so the loading process can skip them safely.
+     *
+     * @param line the user record line read from the file
+     * @return a Customer object if the record is valid, otherwise null
      */
     private static User parseUserLine(String line) {
         if (line == null || line.trim().isEmpty()) {
@@ -182,9 +191,10 @@ class FileManager {
 
     /**
      * Loads items from a text file into the store.
+     * Duplicate item IDs are handled using DuplicateItemException.
      *
      * @param store the store to load items into
-     * @return true if loaded successfully, otherwise false
+     * @return true if the item file is read successfully, otherwise false
      */
     public static boolean loadItems(Store store) {
         if (store == null) {
@@ -226,9 +236,12 @@ class FileManager {
     }
 
     /**
-     * Formats an item into a string line for file storage.
-     * Format: type|id|name|price|stock or type|id|name|price|stock|extra
-     * Extra field: warrantyMonths for Electronic, expiryDate for Grocery
+     * Formats an item object into one line that can be saved in the items file.
+     * Format: type|id|name|price|stock|extra.
+     * The extra field stores warranty months for electronic items or expiry date for grocery items.
+     *
+     * @param item the item to format
+     * @return a formatted string that represents the item
      */
     private static String formatItemLine(Item item) {
         StringBuilder sb = new StringBuilder();
@@ -263,7 +276,11 @@ class FileManager {
     }
 
     /**
-     * Parses a line from the file back into an Item object.
+     * Parses one line from the items file and converts it into an Item object.
+     * Invalid records return null so the loading process can skip them safely.
+     *
+     * @param line the item record line read from the file
+     * @return an Item object if the record is valid, otherwise null
      */
     private static Item parseItemLine(String line) {
         if (line == null || line.trim().isEmpty()) {

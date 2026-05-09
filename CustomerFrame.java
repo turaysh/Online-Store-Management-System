@@ -2,6 +2,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**
+ * Represents the customer dashboard GUI frame.
+ * It allows the customer to view items, manage the cart, checkout, view orders, and log out.
+ */
 public class CustomerFrame extends JFrame {
     private final Store store;
     private final Customer customer;
@@ -9,6 +13,12 @@ public class CustomerFrame extends JFrame {
     private final JTextArea cartArea;
     private final JTextArea ordersArea;
 
+    /**
+     * Creates the customer dashboard frame and initializes its GUI components.
+     *
+     * @param store the store system used by the customer
+     * @param customer the logged-in customer
+     */
     public CustomerFrame(Store store, Customer customer) {
         this.store = store;
         this.customer = customer;
@@ -36,6 +46,11 @@ public class CustomerFrame extends JFrame {
         add(buildMain(), BorderLayout.CENTER);
 
         addWindowListener(new WindowAdapter() {
+            /**
+             * Saves store data and returns to the login frame when the window is closed.
+             *
+             * @param e the window closing event
+             */
             @Override
             public void windowClosing(WindowEvent e) {
                 FileManager.saveAll(store);
@@ -45,6 +60,11 @@ public class CustomerFrame extends JFrame {
         });
     }
 
+    /**
+     * Builds the header panel that displays the customer dashboard title and username.
+     *
+     * @return the header panel
+     */
     private JPanel buildHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBorder(BorderFactory.createEmptyBorder(12, 12, 0, 12));
@@ -61,6 +81,11 @@ public class CustomerFrame extends JFrame {
         return header;
     }
 
+    /**
+     * Builds the main customer panel that contains store items, cart, and orders.
+     *
+     * @return the main panel
+     */
     private JPanel buildMain() {
         JPanel main = new JPanel(new BorderLayout(10, 10));
         main.setBorder(BorderFactory.createEmptyBorder(0, 12, 12, 12));
@@ -77,6 +102,11 @@ public class CustomerFrame extends JFrame {
         return main;
     }
 
+    /**
+     * Builds the right-side panel that contains customer action buttons, cart area, and orders area.
+     *
+     * @return the right-side panel
+     */
     private JPanel buildRightPanel() {
         JPanel rightPanel = new JPanel(new BorderLayout(10, 10));
 
@@ -120,18 +150,31 @@ public class CustomerFrame extends JFrame {
         return rightPanel;
     }
 
+    /**
+     * Refreshes the items text area by displaying all available store items.
+     */
     private void refreshItems() {
         itemsArea.setText(store.getAllItemsText());
     }
 
+    /**
+     * Refreshes the cart text area by displaying the customer's current cart.
+     */
     private void refreshCart() {
         cartArea.setText("Shopping Cart:\n" + customer.getCart().getCartText());
     }
 
+    /**
+     * Refreshes the orders text area by displaying the customer's order history.
+     */
     private void refreshOrders() {
         ordersArea.setText("Order History:\n" + customer.getOrdersText());
     }
 
+    /**
+     * Opens a dialog that allows the customer to add an item to the cart by item ID.
+     * It handles invalid input, missing items, and out-of-stock items.
+     */
     private void showAddToCartDialog() {
         String input = JOptionPane.showInputDialog(this, "Enter item ID to add to cart:", "Add to Cart", JOptionPane.PLAIN_MESSAGE);
         if (input == null || input.trim().isEmpty()) return;
@@ -155,6 +198,10 @@ public class CustomerFrame extends JFrame {
         }
     }
 
+    /**
+     * Completes the checkout process for the customer.
+     * It creates an order, confirms it, reduces stock, clears the cart, and updates the GUI.
+     */
     private void checkout() {
         if (customer.getCart().getNofItem() == 0) {
             JOptionPane.showMessageDialog(this, "Your cart is empty.", "Empty Cart", JOptionPane.WARNING_MESSAGE);
@@ -178,10 +225,12 @@ public class CustomerFrame extends JFrame {
         JOptionPane.showMessageDialog(this, "Checkout completed. Your order has been placed.", "Order Confirmed", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    /**
+     * Saves all store data, closes the customer dashboard, and returns to the login frame.
+     */
     private void logout() {
         FileManager.saveAll(store);
         dispose();
         new LoginFrame(store).setVisible(true);
     }
-
 }

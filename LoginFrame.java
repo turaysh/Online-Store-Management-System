@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -16,6 +15,11 @@ public class LoginFrame extends JFrame {
     private JTextField     usernameField;
     private JPasswordField passwordField;
 
+    /**
+     * Creates the login frame and initializes the header, form, and buttons.
+     *
+     * @param store the store system used for login and account navigation
+     */
     public LoginFrame(Store store) {
         this.store = store;
 
@@ -30,6 +34,11 @@ public class LoginFrame extends JFrame {
         add(buildButtons(), BorderLayout.SOUTH);
 
         addWindowListener(new WindowAdapter() {
+            /**
+             * Saves all store data and exits the program when the login window is closed.
+             *
+             * @param e the window closing event
+             */
             public void windowClosing(WindowEvent e) {
                 FileManager.saveAll(store);
                 System.exit(0);
@@ -39,6 +48,11 @@ public class LoginFrame extends JFrame {
 
     // ── Header ────────────────────────────────────────────────────────────────
 
+    /**
+     * Builds the header panel that displays the store name and login message.
+     *
+     * @return the header panel
+     */
     private JPanel buildHeader() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(new Color(30, 80, 160));
@@ -62,6 +76,11 @@ public class LoginFrame extends JFrame {
 
     // ── Form ──────────────────────────────────────────────────────────────────
 
+    /**
+     * Builds the login form panel with username and password fields.
+     *
+     * @return the login form panel
+     */
     private JPanel buildForm() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(new EmptyBorder(20, 40, 10, 40));
@@ -87,6 +106,11 @@ public class LoginFrame extends JFrame {
 
     // ── Buttons ───────────────────────────────────────────────────────────────
 
+    /**
+     * Builds the buttons panel and connects each button to its action event.
+     *
+     * @return the buttons panel
+     */
     private JPanel buildButtons() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 12));
         panel.setBorder(new EmptyBorder(0, 0, 6, 0));
@@ -114,6 +138,10 @@ public class LoginFrame extends JFrame {
 
     // ── Actions ───────────────────────────────────────────────────────────────
 
+    /**
+     * Handles the login action using the entered username and password.
+     * Opens the admin dashboard for admins or the customer dashboard for customers.
+     */
     private void doLogin() {
         String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword());
@@ -142,9 +170,11 @@ public class LoginFrame extends JFrame {
         }
     }
 
+    /**
+     * Opens the account creation frame and closes the login frame.
+     */
     private void openCreate() {
         dispose();
         new CreateAccountFrame(store).setVisible(true);
     }
 }
-

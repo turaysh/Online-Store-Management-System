@@ -2,9 +2,18 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**
+ * Represents the customer account creation GUI frame.
+ * It collects customer information, validates the input, creates a customer account, and saves it.
+ */
 public class CreateAccountFrame extends JFrame {
     private final Store store;
 
+    /**
+     * Creates the account creation frame and initializes its GUI layout.
+     *
+     * @param store the store system where the new customer account will be saved
+     */
     public CreateAccountFrame(Store store) {
         this.store = store;
 
@@ -18,6 +27,11 @@ public class CreateAccountFrame extends JFrame {
         add(buildForm(), BorderLayout.CENTER);
 
         addWindowListener(new WindowAdapter() {
+            /**
+             * Closes the account creation frame and returns to the login frame.
+             *
+             * @param e the window closing event
+             */
             @Override
             public void windowClosing(WindowEvent e) {
                 dispose();
@@ -26,6 +40,11 @@ public class CreateAccountFrame extends JFrame {
         });
     }
 
+    /**
+     * Builds the header panel for the account creation frame.
+     *
+     * @return the header panel
+     */
     private JPanel buildHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBorder(BorderFactory.createEmptyBorder(12, 12, 0, 12));
@@ -35,6 +54,12 @@ public class CreateAccountFrame extends JFrame {
         return header;
     }
 
+    /**
+     * Builds the account creation form with input fields and buttons.
+     * It validates the entered data, creates the customer, saves data, and returns to login.
+     *
+     * @return the form panel
+     */
     private JPanel buildForm() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 16, 10, 16));
@@ -138,6 +163,12 @@ public class CreateAccountFrame extends JFrame {
         return panel;
     }
 
+    /**
+     * Checks whether the entered email has a valid email format.
+     *
+     * @param email the email address to validate
+     * @return true if the email format is valid, otherwise false
+     */
     private boolean isValidEmail(String email) {
         if (email == null || email.isEmpty()) {
             return false;
@@ -146,4 +177,3 @@ public class CreateAccountFrame extends JFrame {
         return email.matches(regex);
     }
 }
-

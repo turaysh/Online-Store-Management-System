@@ -8,6 +8,13 @@ import java.util.Scanner;
  */
 
 public class test {
+    /**
+     * Runs the console version of the Online Store Management System.
+     * Handles account creation, login, admin actions, customer actions,
+     * checkout, file loading, file saving, and input validation.
+     *
+     * @param args command-line arguments
+     */
     public static void main(String[] args) {
         
         Scanner sc = new Scanner(System.in);
@@ -366,6 +373,12 @@ break;
     } while (choice != 0);
     }
 
+    /**
+     * Safely reads an integer from the user and handles invalid input.
+     *
+     * @param sc the Scanner used to read user input
+     * @return a valid integer entered by the user
+     */
     private static int safeReadInt(Scanner sc) {
         while (true) {
             try {
@@ -377,6 +390,12 @@ break;
         }
     }
 
+    /**
+     * Safely reads a double value from the user and handles invalid input.
+     *
+     * @param sc the Scanner used to read user input
+     * @return a valid double value entered by the user
+     */
     private static double safeReadDouble(Scanner sc) {
         while (true) {
             try {

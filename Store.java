@@ -12,6 +12,11 @@ class Store implements searchable {
     private LinkedListNode<User> usersHead;
     private LinkedListNode<User> usersTail;
 
+    /**
+     * Creates a new store with empty linked lists for users and items.
+     *
+     * @param name the name of the store
+     */
     public Store(String name) {
         this.name = name;
         this.itemsHead = null;
@@ -88,10 +93,23 @@ class Store implements searchable {
             password.matches(".*\\d.*");
     }
 
+    /**
+     * Generates the next user ID based on the current number of users.
+     *
+     * @return the next available user ID
+     */
     public int getNextUserId() {
         return userCount + 1;
     }
 
+    /**
+     * Adds an item to the store items linked list.
+     * Throws a DuplicateItemException if another item with the same ID already exists.
+     *
+     * @param item the item to add
+     * @return true if the item is added successfully, otherwise false
+     * @throws DuplicateItemException if an item with the same ID already exists
+     */
     public boolean addItem(Item item) {
         if (item == null) return false;
         if (itemIdExists(item.getId())) {
@@ -110,6 +128,12 @@ class Store implements searchable {
         return true;
     }
 
+    /**
+     * Removes an item from the store using its item ID.
+     *
+     * @param itemId the ID of the item to remove
+     * @return true if the item is removed successfully, otherwise false
+     */
     public boolean removeItem(int itemId) {
         LinkedListNode<Item> current = itemsHead;
         LinkedListNode<Item> prev = null;
@@ -169,6 +193,9 @@ class Store implements searchable {
         return false;
     }
 
+    /**
+     * Displays all items in the store using console output.
+     */
     public void displayAllItems() {
         if (itemsHead == null) {
             System.out.println("No items available.");
@@ -181,6 +208,11 @@ class Store implements searchable {
         }
     }
 
+    /**
+     * Builds and returns all store items as formatted text for GUI display.
+     *
+     * @return a formatted string containing all store items
+     */
     public String getAllItemsText() {
         if (itemsHead == null) {
             return "No items available.";
@@ -219,6 +251,11 @@ class Store implements searchable {
         return countAvailableItemsRecursive(itemsHead);
     }
 
+    /**
+     * Returns the store name.
+     *
+     * @return the store name
+     */
     public String getName() {
         return name;
     }
@@ -245,6 +282,12 @@ class Store implements searchable {
         return null;
     }
 
+    /**
+     * Searches for an item in the store using its item ID.
+     *
+     * @param itemId the ID of the item to search for
+     * @return the matching item if found, otherwise null
+     */
     public Item searchItemById(int itemId) {
         LinkedListNode<Item> current = itemsHead;
         while (current != null) {
@@ -256,6 +299,12 @@ class Store implements searchable {
         return null;
     }
 
+    /**
+     * Searches for an item in the store using its name.
+     *
+     * @param name the item name to search for
+     * @return the matching item if found, otherwise null
+     */
     public Item searchByName(String name) {
         LinkedListNode<Item> current = itemsHead;
         while (current != null) {
@@ -288,6 +337,11 @@ class Store implements searchable {
         }
     }
 
+    /**
+     * Returns the number of items currently stored in the store.
+     *
+     * @return the number of items in the store
+     */
     public int getNofItem() {
         return nofItem;
     }
